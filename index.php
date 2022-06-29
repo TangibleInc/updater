@@ -46,8 +46,8 @@ new class {
 
   function load() {
 
-    $name   = $this->name;
-    $plugin = $system = $this;
+    $name    = $this->name;
+    $updater = $this;
 
     remove_all_filters( $name ); // First one to load wins
     tangible_plugin_updater( $this );
@@ -67,7 +67,7 @@ new class {
       return;
     }
 
-    $license = isset( $plugin['license'] ) ? $plugin['license'] : 'free';
+    $license = !empty( $plugin['license'] ) ? $plugin['license'] : 'free';
 
     $url = "{$this->server_url}?action=get_metadata&slug=$name&license_key=$license";
 
