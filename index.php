@@ -21,6 +21,8 @@ new class {
     'https://updater.tangible.one';
     // 'http://localhost/updater' // For local development
 
+  public $update_checkers = [];
+
   function __construct() {
 
     $name     = $this->name;
@@ -71,7 +73,10 @@ new class {
 
     $url = "{$this->server_url}?action=get_metadata&slug=$name&license_key=$license";
 
-    Puc_v4_Factory::buildUpdateChecker( $url, $file, $name );
+    $update_checker = Puc_v4_Factory::buildUpdateChecker(
+      $url, $file, $name
+    );
+    $this->update_checkers[ $name ] = $update_checker;
 
     // "Check for updates" link in the Plugins list page
     add_filter('puc_manual_check_link-' . $name, function( $message ) {
