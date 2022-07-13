@@ -1,5 +1,11 @@
 {
   "name": "tangible-plugin-updater",
+  "description": "Plugin updater module",
+  "homepage": "https://bitbucket.org/tangibleinc/plugin-updater",
+  "repository": "git@bitbucket.org:tangibleinc/plugin-updater.git",
+  "tangible": {
+    "deployType": "module"
+  },
   "scripts": {
     "dev": "roll dev",
     "build": "roll build",

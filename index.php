@@ -14,7 +14,7 @@ new class {
   public $name = 'tangible_plugin_updater';
 
   // Remember to update the version - Expected format: YYYYMMDD
-  public $version = '20220629';
+  public $version = '20220711';
 
   // Update server URL
   public $server_url =
@@ -31,10 +31,12 @@ new class {
     remove_all_filters( $name, $priority );
     add_action( $name, [ $this, 'load' ], $priority );
 
-    add_action('plugins_loaded', function() use ( $name ) {
+    $ensure_action = function() use ( $name ) {
       if ( ! did_action( $name )) do_action( $name );
-    }, 0);
+    };
 
+    add_action('plugins_loaded', $ensure_action, 0);
+    add_action('after_setup_theme', $ensure_action, 0);
   }
 
   // Dynamic methods
