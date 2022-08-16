@@ -14,7 +14,7 @@ new class {
   public $name = 'tangible_plugin_updater';
 
   // Remember to update the version - Expected format: YYYYMMDD
-  public $version = '20220711';
+  public $version = '20220816';
 
   // Update server URL
   public $server_url =

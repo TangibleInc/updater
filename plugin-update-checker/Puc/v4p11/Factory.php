@@ -265,7 +265,7 @@ if ( !class_exists('Puc_v4p11_Factory', false) ):
 			if ( $host === 'gitlab.com' ) {
 				$repoRegex = '@^/?(?:[^/#?&]++/){1,20}(?:[^/#?&]++)/?$@';
 			}
-			if ( preg_match($repoRegex, $path) ) {
+			if ( !is_null($path) && preg_match($repoRegex, $path) ) {
 				$knownServices = array(
 					'github.com' => 'GitHub',
 					'bitbucket.org' => 'BitBucket',
