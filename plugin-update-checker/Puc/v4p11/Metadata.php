@@ -8,6 +8,7 @@ if ( !class_exists('Puc_v4p11_Metadata', false) ):
 	 * @copyright 2016
 	 * @access public
 	 */
+#[\AllowDynamicProperties]
 	abstract class Puc_v4p11_Metadata {
 
 		/**
