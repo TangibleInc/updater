@@ -1,20 +1,20 @@
 <?php
-
 if ( ! function_exists( 'tangible_plugin_updater' ) ) :
-
   function tangible_plugin_updater( $arg = false ) {
     static $o;
     return $arg === false ? $o : ( $o = $arg );
   }
-
 endif;
 
+/**
+ * Module loader: Ensure newest version is loaded when multiple plugins bundle
+ * this module.
+ */
 new class {
 
   public $name = 'tangible_plugin_updater';
 
-  // Remember to update the version - Expected format: YYYYMMDD
-  public $version = '20220816';
+  public $version = '20240613'; // Automatically updated with npm run version
 
   // Update server URL
   public $server_url =

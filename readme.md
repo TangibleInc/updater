@@ -7,4 +7,4 @@ Based on:
 
 #### Source code
 
-https://bitbucket.org/tangibleinc/plugin-updater
+https://github.com/tangibleinc/plugin-updater

@@ -1,15 +1,18 @@
 {
   "name": "tangible-plugin-updater",
+  "version": "2024.06.13",
+  "type": "module",
   "description": "Plugin updater module",
-  "homepage": "https://bitbucket.org/tangibleinc/plugin-updater",
-  "repository": "git@bitbucket.org:tangibleinc/plugin-updater.git",
+  "homepage": "https://github.com/tangibleinc/plugin-updater",
+  "repository": "git@github.com:tangibleinc/plugin-updater.git",
   "tangible": {
     "deployType": "module"
   },
   "scripts": {
     "dev": "roll dev",
     "build": "roll build",
-    "format": "roll format"
+    "format": "roll format",
+    "version": "node version.js"
   },
   "dependencies": {},
   "devDependencies": {
