@@ -22,7 +22,7 @@ function register_plugin($plugin) {
   $license = !empty( $plugin['license'] ) ? $plugin['license'] : 'free';
   $url = "{$updater->server_url}?action=get_metadata&slug=$name&license_key=$license";
 
-  $update_checker = Puc_v4_Factory::buildUpdateChecker(
+  $update_checker = \Puc_v4_Factory::buildUpdateChecker(
     $url, $file, $name
   );
 
@@ -40,6 +40,10 @@ function register_plugin($plugin) {
 
 function register_theme($theme) {
   updater\register_plugin($theme);
+}
+
+function set_server_url($url) {
+  updater::$instance->server_url = $url;
 }
 
 require_once __DIR__ . '/legacy.php';
