@@ -1,10 +1,10 @@
 {
-  "name": "tangible-plugin-updater",
-  "version": "2024.06.13",
+  "name": "tangible-updater",
+  "version": "2024.10.20",
   "type": "module",
-  "description": "Plugin updater module",
-  "homepage": "https://github.com/tangibleinc/plugin-updater",
-  "repository": "git@github.com:tangibleinc/plugin-updater.git",
+  "description": "Updater module for plugins and themes",
+  "homepage": "https://github.com/tangibleinc/updater",
+  "repository": "git@github.com:tangibleinc/updater.git",
   "tangible": {
     "deployType": "module"
   },
@@ -16,6 +16,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@tangible/roller": "1.x"
+    "@tangible/roller": "^2.1.1"
   }
 }

@@ -1,4 +1,6 @@
-# Plugin Updater module
+# Updater
+
+Plugin and theme updater module
 
 Based on:
 
@@ -7,4 +9,4 @@ Based on:
 
 #### Source code
 
-https://github.com/tangibleinc/plugin-updater
+https://github.com/tangibleinc/updater
