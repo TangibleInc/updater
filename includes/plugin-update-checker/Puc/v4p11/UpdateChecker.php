@@ -681,11 +681,18 @@ if ( !class_exists('Puc_v4p11_UpdateChecker', false) ):
 				$metadata = call_user_func(array($metaClass, 'fromJson'), $result['body']);
 			} else {
 				do_action('puc_api_error', $status, $result, $url, $this->slug);
-				$this->triggerError(
-					sprintf('The URL %s does not point to a valid metadata file. ', $url)
-					. $status->get_error_message(),
-					E_USER_WARNING
-				);
+
+				/**
+				 * NOTE: Don't throw error by default when plugin has no
+				 * metadata, such as when it's freshly created. Can opt-in
+				 * to catch it using action above.
+				 */
+
+				// $this->triggerError(
+				// 	sprintf('The URL %s does not point to a valid metadata file. ', $url)
+				// 	. $status->get_error_message(),
+				// 	E_USER_WARNING
+				// );
 			}
 
 			return array($metadata, $result);
