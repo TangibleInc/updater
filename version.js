@@ -29,8 +29,8 @@ import fs from 'node:fs/promises'
       // .replace(/return '[0-9]{8}'/, `return '${version}'`)
       // .replace(/'version' => '[0-9]{8}'/, `'version' => '${version}'`)
       .replace(/\$version = '[0-9]{8}'/, `$version = '${version}'`)
-      .replace(/"version": "[0-9]{4}\.[0-9]{2}\.[0-9]{2}"/, `"version": "${versionWithDots}"`)
-      .replace(/Version: [0-9]{4}\.[0-9]{2}\.[0-9]{2}/, `Version: ${versionWithDots}`)
+      .replace(/"version": "[0-9]{4}\.[0-9]+\.[0-9]+"/, `"version": "${versionWithDots}"`)
+      .replace(/Version: [0-9]{4}\.[0-9]+\.[0-9]+/, `Version: ${versionWithDots}`)
 
     // console.log(content)
 
