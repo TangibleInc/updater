@@ -245,7 +245,11 @@ if ( !class_exists('Puc_v4p11_Vcs_PluginUpdateChecker') ):
 			if ( !is_dir($assetDirectory) ) {
 				return array();
 			}
-			$assetBaseUrl = trailingslashit(plugins_url('', $assetDirectory . '/imaginary.file'));
+			$assetBaseUrl = trailingslashit(
+				function_exists('tangible\\framework\\module_url')
+				? \tangible\framework\module_url('', $assetDirectory . '/imaginary.file')
+				: plugins_url('', $assetDirectory . '/imaginary.file')
+			);
 
 			$foundAssets = array();
 			foreach ($filesToKeys as $fileName => $key) {

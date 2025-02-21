@@ -181,6 +181,8 @@ if ( !class_exists('Puc_v4p11_DebugBar_Extension', false) ):
 				if ( !empty($baseUrl) && $relativePath ) {
 					return $baseUrl . '/' . $relativePath;
 				}
+			} else if (function_exists('tangible\\framework\\module_url')) {
+				return \tangible\framework\module_url(basename($absolutePath), $absolutePath);
 			}
 
 			return '';
