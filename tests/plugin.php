@@ -6,9 +6,9 @@
  */
 use tangible\updater;
 
-function register() {
+add_action('plugins_loaded', function() {
   updater\register([
     'name' => 'test-plugin',
     'file' => __FILE__,
   ]);
-}
+});
