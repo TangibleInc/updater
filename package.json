@@ -1,6 +1,6 @@
 {
   "name": "tangible-updater",
-  "version": "2025.2.21",
+  "version": "2025.4.11",
   "type": "module",
   "description": "Updater module for plugins and themes",
   "homepage": "https://github.com/tangibleinc/updater",
@@ -9,13 +9,27 @@
     "deployType": "module"
   },
   "scripts": {
-    "dev": "roll dev",
-    "build": "roll build",
-    "format": "roll format",
-    "version": "node version.js"
+    "start": "wp-env start",
+    "stop": "wp-env stop",
+    "test": "FOLDER=`basename $(realpath $PWD)`; wp-env run tests-wordpress /var/www/html/wp-content/plugins/$FOLDER/vendor/bin/phpunit --testdox -c /var/www/html/wp-content/plugins/$FOLDER/phpunit.xml --verbose",
+    "test:7.4": "WP_ENV_PHP_VERSION=7.4 wp-env start && npm run test",
+    "test:8.2": "WP_ENV_PHP_VERSION=8.2 wp-env start && npm run test",
+    "test:all": "npm run test:7.4 && npm run test:8.2",
+    "test:node": "node tests/index.js",
+    "version": "node version.js",
+    "-- Local environment --": "https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env",
+    "env": "wp-env",
+    "env:update": "wp-env start --update",
+    "composer": "FOLDER=`basename $(realpath $PWD)`; wp-env run cli --env-cwd=wp-content/plugins/$FOLDER composer",
+    "composer:install": "wp-env run cli sudo apk add git && npm run composer install",
+    "composer:update": "npm run composer update",
+    "env:destroy": "wp-env destroy",
+    "env:clean": "wp-env clean all"
   },
   "dependencies": {},
   "devDependencies": {
-    "@tangible/roller": "^2.1.1"
+    "@tangible/roller": "^2.1.1",
+    "@wordpress/env": "^10.22.0",
+    "testra": "^2.1.5"
   }
 }

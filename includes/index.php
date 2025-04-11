@@ -19,8 +19,22 @@ function register_plugin($plugin) {
   $updater = updater::$instance;
   if (empty($updater->server_url)) return;
 
-  $license = !empty( $plugin['license'] ) ? $plugin['license'] : 'free';
-  $url = "{$updater->server_url}?action=get_metadata&slug=$name&license_key=$license";
+  $server_url = $plugin['api'] ?? $updater->server_url;
+  $cloud = $plugin['cloud'] ?? []; // id, license
+
+  $query = [
+    'action' => 'get_metadata',
+    'slug' => $name,
+  ];
+
+  if (isset($cloud['id'])) {
+    $server_url = $cloud['api'] ?? $server_url;
+    $query['pluginId'] = $cloud['id'];
+    $query['license'] = $cloud['license'] ?? '';
+    $query['url'] = site_url();
+  }
+
+  $url = $server_url . '?' . http_build_query($query);
 
   $update_checker = \Puc_v4_Factory::buildUpdateChecker(
     $url, $file, $name

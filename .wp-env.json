@@ -1,0 +1,15 @@
+{
+  "core": "WordPress/WordPress",
+  "phpVersion": "8.2",
+  "port": 3030,
+  "testsPort": 3031,
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true
+  },
+  "plugins": ["."],
+  "mappings": {
+    "wp-content/debug.log": "./debug.log",
+    "wp-content/test-plugin": "./tests/plugin.php"
+  }
+}
