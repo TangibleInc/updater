@@ -66,17 +66,39 @@ Register the plugin with its name and file path.
 
 ### Cloud
 
-Optionally set the property `cloud` to pass additional parameters to the update server.
+Optionally set the property `cloud_id` to pass additional parameters to the update server.
 
 ```php
 updater\register_plugin([
   'name' => $plugin->name,
   'file' => __FILE__,
-  'cloud' => [
-    'id' => '',      // Plugin ID (Required)
-    'license' => '', // License key
-    'api' => '',     // Update API server's URL (Optional)
+  'cloud_id' => '',      // Plugin ID (Required)
+  'api' => '',           // Update API server's URL (Optional)
   ]
+]);
+```
+
+#### License settings page
+
+This feature requires a plugin to be registered with the [Framework](https://github.com/tangibleinc/framework) module, which adds a plugin settings page.
+
+The plugin needs to register a settings tab for the user to enter a license key. The saved value is passed in the request to the update server.
+
+```php
+use tangible\framework;
+use tangible\updater;
+
+$plugin = framework\register_plugin([ ... ]);
+
+framework\register_plugin_settings($plugin, [
+  'tabs' => [
+    'license' => [
+      'title' => 'License',
+      'callback' => function($plugin) {
+        updater\render_license_page($plugin);
+      }
+    ],
+  ],
 ]);
 ```
 
@@ -91,6 +113,22 @@ git clone https://github.com/tangibleinc/updater
 cd updater
 npm install
 ```
+
+### Dev dependencies
+
+Optionally, install dev dependencies for testing.
+
+```sh
+npm run install:dev
+```
+
+To keep them updated, run:
+
+```sh
+npm run update:dev
+```
+
+### Local site
 
 Start local dev server for WordPress test site using [`wp-env`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env).
 

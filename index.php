@@ -15,6 +15,7 @@ if (!class_exists('tangible\\updater')) {
 
   public $server_url = 'https://updater.tangible.one';
   public $update_checkers = [];
+  public $license_key_setting_field = 'license_key';
 
   function load() {
     updater::$instance = $this;

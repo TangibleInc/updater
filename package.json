@@ -11,6 +11,10 @@
   "scripts": {
     "start": "wp-env start",
     "stop": "wp-env stop",
+    "postinstall": "roll install",
+    "update": "roll update",
+    "install:dev": "roll install --dev",
+    "update:dev": "roll update --dev",
     "test": "FOLDER=`basename $(realpath $PWD)`; wp-env run tests-wordpress /var/www/html/wp-content/plugins/$FOLDER/vendor/bin/phpunit --testdox -c /var/www/html/wp-content/plugins/$FOLDER/phpunit.xml --verbose",
     "test:7.4": "WP_ENV_PHP_VERSION=7.4 wp-env start && npm run test",
     "test:8.2": "WP_ENV_PHP_VERSION=8.2 wp-env start && npm run test",
