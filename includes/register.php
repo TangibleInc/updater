@@ -81,7 +81,7 @@ function register_plugin($plugin) {
       if (empty($fail_update_status)) return;
 
       ?><div style="color: #d63638; font-weight: bold;">
-        Update failed: <?php
+        ⚠️ Update failed: <?php
           echo esc_html($fail_update_status);
         ?>
       </div><?php
