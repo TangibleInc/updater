@@ -55,28 +55,39 @@ function register_plugin($plugin) {
     return $message;
   }, 10, 1);
 
-  //Store Validation Error to transient
-  
-   add_filter('puc_request_info_result-' . $name, function($result, $url) use ($name) {
-    if (isset($result->fail_update_status)) {
-        set_transient('fail_update_status_' . $name, $result->fail_update_status, 0);
-    } else {
-        delete_transient('fail_update_status_' . $name);
-    }
-    return $result;
-  }, 10, 2);
+  if (isset($plugin->cloud_id)) {
 
-  //Display the validation error if transient exists
-  
-  add_action('in_plugin_update_message-' . $name . '/' . $name . '.php', function ($plugin) use ($name) {
+    // Store validation result to transient
 
-    $fail_update_status = get_transient( 'fail_update_status_' . $name );
+    $transient_key = 'tangible_updater_fail_update_status_' . $name;
 
-    if (!empty($fail_update_status)) {
-      echo '<br /><span style="color: #d63638; font-weight: bold;">⚠️ <strong>Update Attempt Failed:</strong> ' . $fail_update_status . '</span><br />';
-    }
-  
-  });
+    add_filter('puc_request_info_result-' . $name, function($result, $url) use ($name, $transient_key) {
+      if (isset($result->fail_update_status)) {
+          set_transient($transient_key, $result->fail_update_status, 0);
+      } else {
+          delete_transient($transient_key);
+      }
+      return $result;
+    }, 10, 2);
+
+    // Display any error if transient exists
+
+    $basename = plugin_basename( $file );
+    $action_name = "in_plugin_update_message-{$basename}";
+
+    add_action($action_name, function ($plugin) use ($name, $transient_key) {
+
+      $fail_update_status = get_transient( $transient_key );
+      if (empty($fail_update_status)) return;
+
+      ?><div style="color: #d63638; font-weight: bold;">
+        Update failed: <?php
+          echo esc_html($fail_update_status);
+        ?>
+      </div><?php
+    });
+  }
+
 }
 
 function register_theme($theme) {
