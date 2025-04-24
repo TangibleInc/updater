@@ -55,6 +55,28 @@ function register_plugin($plugin) {
     return $message;
   }, 10, 1);
 
+  //Store Validation Error to transient
+  
+   add_filter('puc_request_info_result-' . $name, function($result, $url) use ($name) {
+    if (isset($result->fail_update_status)) {
+        set_transient('fail_update_status_' . $name, $result->fail_update_status, 0);
+    } else {
+        delete_transient('fail_update_status_' . $name);
+    }
+    return $result;
+  }, 10, 2);
+
+  //Display the validation error if transient exists
+  
+  add_action('in_plugin_update_message-' . $name . '/' . $name . '.php', function ($plugin) use ($name) {
+
+    $fail_update_status = get_transient( 'fail_update_status_' . $name );
+
+    if (!empty($fail_update_status)) {
+      echo '<br /><span style="color: #d63638; font-weight: bold;">⚠️ <strong>Update Attempt Failed:</strong> ' . $fail_update_status . '</span><br />';
+    }
+  
+  });
 }
 
 function register_theme($theme) {
