@@ -80,11 +80,11 @@ function register_plugin($plugin) {
       $fail_update_status = get_transient( $transient_key );
       if (empty($fail_update_status)) return;
 
-      ?><div style="color: #d63638; font-weight: bold;">
+      ?><br /><span style="color: #d63638; font-weight: bold;">
         ⚠️ Update failed: <?php
           echo esc_html($fail_update_status);
         ?>
-      </div><?php
+      </span><?php
     });
   }
 
