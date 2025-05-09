@@ -5,20 +5,20 @@ use tangible\updater;
 
 CONST LICENSE_CLEARED_AND_DEACTIVATED = 'License Cleared and Deactivated';
 
-//license page
+// License front end
 function render_license_page($plugin) {
   if (!class_exists('tangible\\framework')) return;
 
-  //field name and value
+  // Field name and value
   $settings_key = framework\get_plugin_settings_key($plugin);
   $subfield = updater\get_license_key_setting_field();
 
-  $license_status = get_license_status($plugin);
+  $license_status = updater\get_license_status($plugin);
 
   $field_name = $settings_key . '[' . $subfield . ']';
   $field_value = (($license_status !== LICENSE_CLEARED_AND_DEACTIVATED)? updater\get_license_key($plugin):'');
 
-  //license status
+  // License status
   $is_valid = ($license_status === 'valid');
 
   ?>
@@ -54,11 +54,10 @@ function render_license_page($plugin) {
       <?php endif; ?>
     </div>
   <?php
-  //auto change this to activate and deactivate button
-  //submit_button();
+  // submit_button();
 }
 
-//license key
+// License key
 function get_license_key_setting_field() {
   return updater::$instance->license_key_setting_field;
 }
@@ -93,7 +92,7 @@ function update_license_key($plugin, $license_key ='') {
   ]);
 }
 
-//status key
+// Status key
 function get_license_status_setting_field() {
   // Check if instance and property exist, otherwise return default
   return property_exists(updater::$instance, 'license_status_setting_field') 
@@ -110,7 +109,7 @@ function get_license_status($plugin) {
   }
 
   $settings = framework\get_plugin_settings($plugin);
-  $field = get_license_status_setting_field(); // Use the function
+  $field = get_license_status_setting_field();
   
   return $settings[$field] ?? '';
 }
@@ -123,14 +122,18 @@ function set_license_status($plugin, $status) {
       if (empty($plugin)) return false;
   }
 
-  $field = get_license_status_setting_field(); // Use the same helper function
+  // Use the same helper function
+  $field = get_license_status_setting_field(); 
   
   return framework\update_plugin_settings($plugin, [
       $field => $status
   ]);
 }
 
-//create an update function here for cloud to activate on wordpress end.
+/**
+ * Create an update function here for cloud to activate on WordPress end.
+ */
+
 add_filter('tangible_plugin_save_settings_on_submit', function(
   $should_update, 
   $plugin, 
@@ -163,36 +166,33 @@ function process_license_action($plugin, $new_settings) {
     throw new Exception('Product ID is missing');
   }
 
-  $action = submit_action($plugin, $_POST['license_action']);
+  $action = updater\submit_action($plugin, $_POST['license_action']);
   $license_key = sanitize_text_field($new_settings['license_key'] ?? '');
 
   $response = updater\cloud_endpoint($plugin, $license_key, $action);
 
-  //set license key activation status if valid or invalid based on the $response
   $response_code = updater\response_code($response);
   $response_body = updater\response_body($response);
 
-  // Check response if successful
+   // Handle error responses
   $error_message = '';
   if (is_wp_error($response) || $response_code === 403) {
 
-    if ( is_wp_error( $response ) ) {
-      $error_message = 'License server error: ' . $response->get_error_message();
-    } else {
-      $error_message = $response_body['error'] ?? 'License validation failed (Forbidden)';
-    }
-
+     $error_message = is_wp_error($response) 
+            ? 'License server error: ' . $response->get_error_message()
+            : $response_body['error'] ?? 'License validation failed (Forbidden)';
   } else {
     if(false === $response_body->success) {
       $error_message = updater\check_license_response($response_body, $plugin);
     }
   }
 
-  //set license status
+  // Set license status based on action or error
   $status = ($_POST['license_action'] === 'deactivate_license_clear' || !empty($error_message)) ? LICENSE_CLEARED_AND_DEACTIVATED :$response_body->license;
-  set_license_status($plugin, $status);
+  
+  updater\set_license_status($plugin, $status);
 
-  //add notice here - add redirect notice (need on tangibe framework)
+  // Display error notice if applicable
   if(!empty($error_message)) {
     handle_error($error_message);
   }

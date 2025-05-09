@@ -5,7 +5,7 @@ use tangible\updater;
 
 function cloud_endpoint($plugin, $license_key, $action) {
   
-  //check license from cloud edd api
+  // Cloud post endpoint
   $response = wp_remote_post($plugin->cloud_activation_url, [
     'timeout'   => 30,
     'sslverify' => false,
@@ -13,7 +13,7 @@ function cloud_endpoint($plugin, $license_key, $action) {
         'edd_action' => $action,
         'item_id'    => $plugin->cloud_id,
         'license'    => $license_key,
-        'url'        => home_url(), // No need to urlencode here
+        'url'        => home_url(),
     ]
   ]);
 
@@ -35,7 +35,7 @@ function submit_action($plugin, $action) {
   if ($action === 'deactivate_license_clear') {
     $action = 'deactivate_license';
 
-    //clear license fields
+    // Clear license fields
     update_license_key($plugin, '');
   }
 
