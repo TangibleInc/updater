@@ -26,7 +26,7 @@ function register_plugin($plugin) {
   $updater = updater::$instance;
   if (empty($updater->server_url)) return;
 
-  $server_url = $plugin->api ?? $updater->server_url;
+  $server_url = $plugin->cloud_updater_url ?? $updater->server_url;
 
   $query = [
     'action' => 'get_metadata',
