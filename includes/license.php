@@ -146,11 +146,11 @@ add_filter('tangible_plugin_save_settings_on_submit', function(
 
   try {
 
-    process_license_action($plugin, $new_settings);
+    updater\process_license_action($plugin, $new_settings);
     return $should_update;
 
   } catch (Exception $e) {
-    handle_error($e->getMessage());
+    updater\handle_error($e->getMessage());
     return false;
   }
 
@@ -194,7 +194,7 @@ function process_license_action($plugin, $new_settings) {
 
   // Display error notice if applicable
   if(!empty($error_message)) {
-    handle_error($error_message);
+    updater\handle_error($error_message);
   }
 }
 
