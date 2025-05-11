@@ -24,9 +24,6 @@ function register_plugin($plugin) {
   }
 
   $updater = updater::$instance;
-  if (empty($updater->server_url)) return;
-
-  $server_url = $plugin->cloud_updater_url ?? $updater->server_url;
 
   $query = [
     'action' => 'get_metadata',
@@ -34,26 +31,42 @@ function register_plugin($plugin) {
   ];
 
   if (isset($plugin->cloud_id)) {
+
+    // Query parameters passed to Cloud API
     $query['pluginId'] = $plugin->cloud_id;
     $query['license'] = $plugin->license ?? updater\get_license_key($name);
     $query['url'] = site_url();
+
+    // Provide default URLs
+    $plugin->updater_url = $plugin->updater_url ??
+      'https://cloud.tangible.one/api/plugin-update'
+      // 'http://localhost:83/api/plugin-update'
+    ;
+
+    $plugin->activation_url = $plugin->activation_url ??
+      'https://cloud.tangible.one/api/edd'
+      // 'http://localhost:83/api/plugin-activation'
+    ;
   }
 
-  $url = $server_url . '?' . http_build_query($query);
+  $server_url = $plugin->updater_url ?? $updater->server_url;
 
-  $update_checker = \Puc_v4_Factory::buildUpdateChecker(
-    $url, $file, $name
-  );
+  if (!empty($server_url)) {
 
-  $updater->update_checkers[ $name ] = $update_checker;
+    $url = $server_url . '?' . http_build_query($query);
 
-  // Add a link "Check for updates" in the admin plugins list
-  add_filter('puc_manual_check_link-' . $name, function( $message ) {
+    $update_checker = \Puc_v4_Factory::buildUpdateChecker(
+      $url, $file, $name
+    );
 
-    // Optionally, validate license and return empty string to disable link
+    $updater->update_checkers[ $name ] = $update_checker;
 
-    return $message;
-  }, 10, 1);
+    // Add a link "Check for updates" in the admin plugins list
+    add_filter('puc_manual_check_link-' . $name, function( $message ) {
+      // Optionally, validate license and return empty string to disable link
+      return $message;
+    }, 10, 1);
+  }
 
   if (isset($plugin->cloud_id)) {
 
@@ -87,7 +100,6 @@ function register_plugin($plugin) {
       </span><?php
     });
   }
-
 }
 
 function register_theme($theme) {
