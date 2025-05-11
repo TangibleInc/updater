@@ -6,7 +6,7 @@ use tangible\updater;
 function cloud_endpoint($plugin, $license_key, $action) {
   
   // Cloud post endpoint
-  $response = wp_remote_post($plugin->cloud_activation_url, [
+  $response = wp_remote_post($plugin->activation_url, [
     'timeout'   => 30,
     'sslverify' => false,
     'body'      => [
@@ -36,7 +36,7 @@ function submit_action($plugin, $action) {
     $action = 'deactivate_license';
 
     // Clear license fields
-    update_license_key($plugin, '');
+    updater\update_license_key($plugin, '');
   }
 
   return $action;
