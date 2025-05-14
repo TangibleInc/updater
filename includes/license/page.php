@@ -25,23 +25,23 @@ function render_license_page($plugin) {
   $is_valid = $license_status === 'valid';
 
   ?>
-  <h2>License Management</h2>
+  <h3>
+    License Key &mdash;&nbsp;
+    <span class="license-status-indicator">
+      <?php if ($is_valid) : ?>
+        <span class="valid-license success"><b>Active</b></span>
+      <?php else : ?>
+        <span class="invalid-license error"><b>Not active</b></span>
+      <?php endif; ?>
+    </span>
+  </h3>
   <div class="license-input-section">
-    <label for="license_key">License Key:</label>
-    <input type="password" 
+    <input type="password" class="regular-text"
             id="license_key"
             name="<?php echo esc_attr($field_name); ?>" 
             value="<?php echo esc_attr($field_value); ?>"
-            placeholder="Enter your license key">
-    <?php if (!empty($license_status)) { ?>
-      <span class="license-status-indicator">
-        <?php if ($is_valid) : ?>
-          <span class="valid-license"><b>✓ Activated</b></span>
-        <?php else : ?>
-          <span class="invalid-license"><b>✗ <?php echo ucfirst($license_status); ?></b></span>
-        <?php endif; ?>
-      </span>
-    <?php } ?>
+            placeholder="Enter License Key">
+   
   </div>
   <br />
   <div class="license-buttons">
