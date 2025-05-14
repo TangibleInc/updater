@@ -41,7 +41,6 @@ function render_license_page($plugin) {
             name="<?php echo esc_attr($field_name); ?>" 
             value="<?php echo esc_attr($field_value); ?>"
             placeholder="Enter License Key">
-   
   </div>
   <br />
   <div class="license-buttons">
@@ -50,7 +49,7 @@ function render_license_page($plugin) {
         Deactivate
       </button>
       <button type="submit" name="<?php echo updater\license_action_key; ?>" value="deactivate_license_clear" class="button button-danger">
-        Clear & Deactivate
+        Deactivate &amp; Clear License
       </button>
     <?php else : ?>
       <button type="submit" name="<?php echo updater\license_action_key; ?>" value="activate_license" class="button button-primary">
