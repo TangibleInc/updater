@@ -5,6 +5,7 @@ use tangible\updater;
 
 $updater = updater::$instance;
 
+$version = $updater->version;
 $slug    = $plugin->name;
 $license = get_license_key($plugin);
 $license_status =get_license_status($plugin);
@@ -41,13 +42,13 @@ add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) u
 
 }, 10, 1);
 
-add_action( 'admin_footer', function() use( $updater, $plugin ) {
-
+add_action( 'admin_footer', function() use( $version, $plugin ) {
+ 
   wp_register_script(
       'tangible-plugin-row-script-gh-js',
       plugin_dir_url(__FILE__).'js/activation-notice.js',
       ['jquery'],
-      $updater->version,
+      $version,
       true
   );
 
