@@ -8,7 +8,6 @@ jQuery(document).ready(function($) {
 
         // Add update class to each plugin row
         pluginFiles.forEach(function(pluginFile) {
-          console.log(pluginFile);
             $('tr[data-plugin="' + pluginFile.trim() + '"]').addClass('update');
         });
     }
