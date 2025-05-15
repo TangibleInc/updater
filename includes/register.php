@@ -100,6 +100,9 @@ function register_plugin($plugin) {
       </span><?php
     });
   }
+
+  // Set up plugin notices
+  require_once __DIR__ . '/license/notice.php';
 }
 
 function register_theme($theme) {
