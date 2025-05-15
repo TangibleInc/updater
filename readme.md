@@ -64,6 +64,28 @@ add_action('plugins_loaded', function() {
 
 Register the plugin with its name and file path.
 
+### Framework
+
+When registering with the Framework module, the same plugin instance can be passed to the Updater.
+
+```php
+use tangible\framework;
+use tangible\updater;
+
+require_once __DIR__ . '/vendor/tangible/framework/index.php';
+require_once __DIR__ . '/vendor/tangible/updater/index.php';
+
+add_action('plugins_loaded', function() {
+
+  $plugin = framework\register_plugin([
+    'name' => 'example-plugin',
+    // ...
+  ]);
+
+  updater\register_plugin($plugin);
+});
+```
+
 ### Cloud
 
 Optionally set the property `cloud_id` to pass additional parameters to the update server.
@@ -72,13 +94,13 @@ Optionally set the property `cloud_id` to pass additional parameters to the upda
 updater\register_plugin([
   'name' => $plugin->name,
   'file' => __FILE__,
-  'cloud_id' => '',      // Plugin ID (Required)
-  'api' => '',           // Update API server's URL (Optional)
-  ]
+  'cloud_id' => '',       // Plugin ID (Required)
+  'updater_url' => '',    // Update server URL (Optional)
+  'activation_url' => '', // License activation URL (Optional)
 ]);
 ```
 
-#### License settings page
+### Licensing
 
 This feature requires a plugin to be registered with the [Framework](https://github.com/tangibleinc/framework) module, which adds a plugin settings page.
 
