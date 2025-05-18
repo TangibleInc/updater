@@ -1,14 +1,14 @@
-jQuery(document).ready(function($) {
-    // Access the localized data
-    var pluginData = window.tangible_plugin_data_gh;
-    
-    if (pluginData) {
-        // Use the array directly
-        var pluginFiles = Array.isArray(pluginData) ? pluginData : pluginData.split(',');
+(function() {
+  // Access the localized data
+  let pluginRows = window.tangibleUpdaterPluginRowEnqueued
+  if (!pluginRows) return
 
-        // Add update class to each plugin row
-        pluginFiles.forEach(function(pluginFile) {
-            $('tr[data-plugin="' + pluginFile.trim() + '"]').addClass('update');
-        });
-    }
-});
+  // Ensure array
+  pluginRows = Array.isArray(pluginRows) ? pluginRows : pluginRows.split(',')
+
+  // Add update class to each plugin row
+  for (const file of pluginRows) {
+    const el = document.querySelector(`tr[data-plugin="${ file }"]`)
+    el?.classList.add('update')
+  }
+})()
