@@ -50,19 +50,16 @@ add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) u
 
 add_action( 'admin_footer', function() use( $version, $plugin ) {
  
-  wp_register_script(
-      'tangible-plugin-row-script-gh-js',
-      plugin_dir_url(__FILE__).'js/activation-notice.js',
-      ['jquery'],
-      $version,
-      true
-  );
+  $name = 'tangible-updater-license-activation-notice';
+  $url = $plugin->url . '/includes/license/js/activation-notice.js';
+
+  wp_register_script( $name, $url, [], $version, true );
 
   wp_localize_script(
-      'tangible-plugin-row-script-gh-js',
-      'tangible_plugin_data_gh',
+      $name,
+      'tangibleUpdaterPluginRowEnqueued',
       $plugin->plugin_row_enqueued
   );
   
-  wp_enqueue_script( 'tangible-plugin-row-script-gh-js' );
+  wp_enqueue_script( $name );
 } );
