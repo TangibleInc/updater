@@ -28,15 +28,21 @@ add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) u
             ? __('License key is missing - please activate your license for plugin updates and support.', $slug)
             : __('License key is invalid or expired - please renew your license for plugin updates and support.', $slug);
         
-        echo '<tr class="active plugin-update-tr">'; // Removes the top border
-        echo '<td colspan="4" class="plugin-update colspanchange">';
-        echo '<div class="update-message notice inline notice-error notice-alt">';
-        echo '<p style="display: flex; align-items: center; gap: 8px;">';
-          echo esc_html($message) . ' <a href="' . esc_url($activation_url) . '" style="font-weight: bold;">' . __('Activate License', $slug). '</a>';
-        echo '</p>';
-        echo '</div>';
-        echo '</td>';
-        echo '</tr>';
+        ?>
+        <tr class="active plugin-update-tr">
+          <td colspan="4" class="plugin-update colspanchange">
+            <div class="update-message notice inline notice-error notice-alt">
+              <p style="display: flex; align-items: center; gap: 8px;">
+                <?php echo esc_html($message); ?>
+                <a href="<?php echo esc_url($activation_url); ?>"
+                  style="font-weight: bold;">
+                  <?php echo __('Activate License', $slug); ?>
+                </a>
+              </p>
+            </div>
+          </td>
+        </tr>
+        <?php
     }
   }
 
