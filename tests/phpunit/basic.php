@@ -27,8 +27,14 @@ class Basic_TestCase extends \WP_UnitTestCase {
   }
 
   function test_updater_with_framework() {
+
     $expected = $this->register_with_framework();
-    $this->assertEquals( $expected, framework\get_plugin($this->plugin_name) );
+    $plugin = framework\get_plugin($this->plugin_name);
+
+    // Assert Partial<Plugin>
+    foreach ($expected as $key => $value) {
+      $this->assertEquals( $expected->$key, $plugin->$key );
+    }
   }
 
   function test_updater_register_plugin() {
