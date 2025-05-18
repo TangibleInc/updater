@@ -49,7 +49,10 @@ add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) u
 }, 10, 1);
 
 add_action( 'admin_footer', function() use( $version, $plugin ) {
- 
+  if (
+    empty($plugin->plugin_row_enqueued)
+    || get_current_screen()->id !== 'plugins'
+  ) return;
   $name = 'tangible-updater-license-activation-notice';
   $url = $plugin->url . '/includes/license/js/activation-notice.js';
 
