@@ -20,7 +20,7 @@ if (!class_exists('tangible\\updater')) {
   
   function load() {
     updater::$instance = $this;
-    $this->url = plugins_url( __FILE__, '/' );
+    $this->url = plugins_url( '/', __FILE__ );
     require_once __DIR__ . '/includes/index.php';
   }
 
