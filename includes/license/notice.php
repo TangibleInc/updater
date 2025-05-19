@@ -54,7 +54,7 @@ add_action( 'admin_footer', function() use( $version, $plugin ) {
     || get_current_screen()->id !== 'plugins'
   ) return;
   $name = 'tangible-updater-license-activation-notice';
-  $url = $plugin->url . '/includes/license/js/activation-notice.js';
+  $url = $plugin->url . 'vendor/tangible/updater/includes/license/js/activation-notice.js';
 
   wp_register_script( $name, $url, [], $version, true );
 
