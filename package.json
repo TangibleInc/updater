@@ -1,6 +1,6 @@
 {
   "name": "tangible-updater",
-  "version": "2025.4.11",
+  "version": "2025.5.20",
   "type": "module",
   "description": "Updater module for plugins and themes",
   "homepage": "https://github.com/tangibleinc/updater",
