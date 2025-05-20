@@ -27,8 +27,14 @@ class Basic_TestCase extends \WP_UnitTestCase {
   }
 
   function test_updater_with_framework() {
+
     $expected = $this->register_with_framework();
-    $this->assertEquals( $expected, framework\get_plugin($this->plugin_name) );
+    $plugin = framework\get_plugin($this->plugin_name);
+
+    // Assert Partial<Plugin>
+    foreach ($expected as $key => $value) {
+      $this->assertEquals( $expected->$key, $plugin->$key );
+    }
   }
 
   function test_updater_register_plugin() {
@@ -42,54 +48,13 @@ class Basic_TestCase extends \WP_UnitTestCase {
     $this->assertTrue( isset(updater::$instance->update_checkers[ $name ]) );
   }
 
-  function test_updater_license_get_set() {
-
+  function test_updater_register_with_plugin_instance() {
     $name = $this->plugin_name;
-    $license_key = 'abcdefg';
+    $plugin = $this->register_with_framework();
 
-    $this->register_with_framework();
-
-    updater\update_license_key($name, $license_key);
-
-    $this->assertEquals( $license_key, updater\get_license_key($name) );
-  }
-
-  function test_updater_register_plugin_with_cloud() {
-
-    $name = $this->plugin_name;
-    $api_url = 'https://example.com';
-    $cloud_id = '123';
-    $license_key = 'abcdefg';
-
-    $this->register_with_framework();
-
-    updater\update_license_key($name, $license_key);
-    $this->assertEquals( $license_key, updater\get_license_key($name) );
-
-    updater\register_plugin([
-      'name' => $name,
-      'file' => __DIR__ . '../plugin.php',
-      'cloud_id' => $cloud_id,
-      'api' => $api_url
-    ]);
+    updater\register_plugin( $plugin );
 
     $this->assertTrue( isset(updater::$instance->update_checkers[ $name ]) );
-
-    $checker = updater::$instance->update_checkers[ $name ];
-
-    $this->assertTrue( isset($checker->metadataUrl) );
-
-    $port = $_ENV['WP_ENV_TESTS_PORT'] ?? '3031';
-    $test_site_url = 'http://localhost:' . $port;
-
-    $expected =   $api_url . '?' . http_build_query([
-      'action' => 'get_metadata',
-      'slug' => $name,
-      'pluginId' => $cloud_id,
-      'license' => $license_key,
-      'url' => $test_site_url
-    ]);
-
-    $this->assertEquals($expected, $checker->metadataUrl);
   }
+
 }

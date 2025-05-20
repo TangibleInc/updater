@@ -9,7 +9,6 @@
   },
   "plugins": ["."],
   "mappings": {
-    "wp-content/debug.log": "./debug.log",
-    "wp-content/test-plugin": "./tests/plugin.php"
+    "wp-content/plugins/test-plugin": "./tests"
   }
 }
