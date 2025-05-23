@@ -84,4 +84,37 @@ class Cloud_TestCase extends \WP_UnitTestCase {
     $this->assertTrue(true);
   }
 
+  function test_license_notice_hook() {
+
+    global $wp_filter;
+
+    $first_plugin = $this->register_with_framework([
+      'name'     => 'first-plugin-name',
+      'cloud_id' => 123
+    ]);
+
+    $second_plugin = $this->register_with_framework([
+      'name'     => 'second-plugin-name',
+      'cloud_id' => 124
+    ]);
+
+    $third_plugin = $this->register_with_framework([
+      'name' => 'third-plugin-name'
+    ]);
+
+    updater\register_plugin($first_plugin);
+    updater\register_plugin($second_plugin);
+    updater\register_plugin($third_plugin);
+
+    foreach ([ $first_plugin, $second_plugin ] as $plugin ) {
+
+      $action_name = "after_plugin_row_{$plugin->name}/{$plugin->name}.php";
+      $action_count = count($wp_filter[$action_name]->callbacks);
+
+      $this->assertEquals(1, $action_count);
+    }
+
+    $action_name = "after_plugin_row_{$third_plugin->name}/{$third_plugin->name}.php";
+    $this->assertEquals(false, isset($wp_filter[$action_name]));
+  }
 }

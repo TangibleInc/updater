@@ -10,7 +10,7 @@ use tangible\updater;
 add_action('plugins_loaded', function() {
 
   $plugin = framework\register_plugin([
-    'name' => 'test-plugin',
+    'name'           => 'test-plugin',
     'title'          => 'Test Plugin',
     'setting_prefix' => 'test_plugin',
 
