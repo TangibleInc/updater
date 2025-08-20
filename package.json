@@ -15,6 +15,7 @@
     "update": "roll update",
     "install:dev": "roll install --dev",
     "update:dev": "roll update --dev",
+    "format": "roll format",
     "test": "FOLDER=`basename $(realpath $PWD)`; wp-env run tests-wordpress /var/www/html/wp-content/plugins/$FOLDER/vendor/bin/phpunit --testdox -c /var/www/html/wp-content/plugins/$FOLDER/phpunit.xml --verbose",
     "test:7.4": "WP_ENV_PHP_VERSION=7.4 wp-env start && npm run test",
     "test:8.2": "WP_ENV_PHP_VERSION=8.2 wp-env start && npm run test",
@@ -32,8 +33,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@tangible/roller": "^2.1.1",
-    "@wordpress/env": "^10.22.0",
+    "@tangible/php-beautify": "^1.2.0",
+    "@tangible/roller": "^2.1.5",
+    "@wordpress/env": "^10.28.0",
     "testra": "^2.1.5"
   }
 }
