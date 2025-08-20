@@ -1,14 +1,15 @@
 <?php
 namespace tangible;
-use tangible\updater as updater;
 
-if (!class_exists('tangible\\updater')) {
+use tangible\updater;
+
+if ( ! class_exists( 'tangible\\updater' ) ) {
   class updater {
     static $instance;
-  };
+  }
 }
 
-(include __DIR__ . '/module-loader.php')(new class extends \StdClass {
+( require __DIR__ . '/module-loader.php' )(new class() extends \StdClass {
 
   public $name = 'tangible_plugin_updater';
   public $version = '20250523'; // Automatically updated with npm run version
@@ -17,7 +18,7 @@ if (!class_exists('tangible\\updater')) {
   public $update_checkers = [];
   public $license_key_setting_field = 'license_key';
   public $license_status_setting_field = 'status_key';
-  
+
   function load() {
     updater::$instance = $this;
     $this->url = plugins_url( '/', __FILE__ );
