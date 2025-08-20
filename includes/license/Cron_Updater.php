@@ -15,8 +15,7 @@ class Cron_Updater
     $this->plugin_file = $plugin_file ?: __FILE__;
     $this->plugin_config = $plugin_config;
 
-    error_log('constructor initialized expiration');
-
+    //error_log('constructor initialized expiration');
     //error_log('Testing plugin config: ' . print_r($plugin_config, true));
 
     // Register hooks
@@ -53,7 +52,7 @@ class Cron_Updater
 
     // Skip if no license key exists
     if (empty($license)) {
-      error_log('License check skipped: No license key found');
+      //error_log('License check skipped: No license key found');
       return;
     }
 
@@ -70,10 +69,10 @@ class Cron_Updater
     // Log for debugging
     //error_log("License Check Response - Code: " . $response_code);
     //error_log("Headers: " . print_r($response_headers, true));
-    error_log("Body: " . $response_body);
+    //error_log("Body: " . $response_body);
 
     if (!$data || !isset($data['status'])) {
-      error_log('Invalid license check response: ' . $response_body);
+      //error_log('Invalid license check response: ' . $response_body);
       return false;
     }
 
