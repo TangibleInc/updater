@@ -1,5 +1,5 @@
 <?php
-if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
+if (!class_exists('Puc_v4p11_Plugin_UpdateChecker', false)):
 
 	/**
 	 * A custom plugin update checker.
@@ -8,7 +8,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 	 * @copyright 2018
 	 * @access public
 	 */
-	class Puc_v4p11_Plugin_UpdateChecker extends Puc_v4p11_UpdateChecker {
+	class Puc_v4p11_Plugin_UpdateChecker extends Puc_v4p11_UpdateChecker
+	{
 		protected $updateTransient = 'update_plugins';
 		protected $translationType = 'plugin';
 
@@ -33,21 +34,22 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param string $optionName Where to store book-keeping info about update checks. Defaults to 'external_updates-$slug'.
 		 * @param string $muPluginFile Optional. The plugin filename relative to the mu-plugins directory.
 		 */
-		public function __construct($metadataUrl, $pluginFile, $slug = '', $checkPeriod = 12, $optionName = '', $muPluginFile = ''){
+		public function __construct($metadataUrl, $pluginFile, $slug = '', $checkPeriod = 12, $optionName = '', $muPluginFile = '')
+		{
 			$this->pluginAbsolutePath = $pluginFile;
 			$this->pluginFile = plugin_basename($this->pluginAbsolutePath);
 			$this->muPluginFile = $muPluginFile;
 
 			//If no slug is specified, use the name of the main plugin file as the slug.
 			//For example, 'my-cool-plugin/cool-plugin.php' becomes 'cool-plugin'.
-			if ( empty($slug) ){
+			if (empty($slug)) {
 				$slug = basename($this->pluginFile, '.php');
 			}
 
 			//Plugin slugs must be unique.
 			$slugCheckFilter = 'puc_is_slug_in_use-' . $slug;
 			$slugUsedBy = apply_filters($slugCheckFilter, false);
-			if ( $slugUsedBy ) {
+			if ($slugUsedBy) {
 				$this->triggerError(sprintf(
 					'Plugin slug "%s" is already in use by %s. Slugs must be unique.',
 					htmlentities($slug),
@@ -60,7 +62,7 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 
 			//Backwards compatibility: If the plugin is a mu-plugin but no $muPluginFile is specified, assume
 			//it's the same as $pluginFile given that it's not in a subdirectory (WP only looks in the base dir).
-			if ( (strpbrk($this->pluginFile, '/\\') === false) && $this->isUnknownMuPlugin() ) {
+			if ((strpbrk($this->pluginFile, '/\\') === false) && $this->isUnknownMuPlugin()) {
 				$this->muPluginFile = $this->pluginFile;
 			}
 
@@ -77,7 +79,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param int $checkPeriod
 		 * @return Puc_v4p11_Scheduler
 		 */
-		protected function createScheduler($checkPeriod) {
+		protected function createScheduler($checkPeriod)
+		{
 			$scheduler = new Puc_v4p11_Scheduler($this, $checkPeriod, array('load-plugins.php'));
 			register_deactivation_hook($this->pluginFile, array($scheduler, 'removeUpdaterCron'));
 			return $scheduler;
@@ -89,7 +92,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return void
 		 */
-		protected function installHooks(){
+		protected function installHooks()
+		{
 			//Override requests for plugin information
 			add_filter('plugins_api', array($this, 'injectInfo'), 20, 3);
 
@@ -110,7 +114,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @internal
 		 */
-		public function removeHooks() {
+		public function removeHooks()
+		{
 			parent::removeHooks();
 			$this->extraUi->removeHooks();
 			$this->package->removeHooks();
@@ -126,10 +131,11 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param array $queryArgs Additional query arguments to append to the request. Optional.
 		 * @return Puc_v4p11_Plugin_Info
 		 */
-		public function requestInfo($queryArgs = array()) {
+		public function requestInfo($queryArgs = array())
+		{
 			list($pluginInfo, $result) = $this->requestMetadata('Puc_v4p11_Plugin_Info', 'request_info', $queryArgs);
 
-			if ( $pluginInfo !== null ) {
+			if ($pluginInfo !== null) {
 				/** @var Puc_v4p11_Plugin_Info $pluginInfo */
 				$pluginInfo->filename = $this->pluginFile;
 				$pluginInfo->slug = $this->slug;
@@ -146,11 +152,12 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return Puc_v4p11_Update|null An instance of Plugin_Update, or NULL when no updates are available.
 		 */
-		public function requestUpdate() {
+		public function requestUpdate()
+		{
 			//For the sake of simplicity, this function just calls requestInfo()
 			//and transforms the result accordingly.
 			$pluginInfo = $this->requestInfo(array('checking_for_updates' => '1'));
-			if ( $pluginInfo === null ){
+			if ($pluginInfo === null) {
 				return null;
 			}
 			$update = Puc_v4p11_Plugin_Update::fromPluginInfo($pluginInfo);
@@ -171,11 +178,12 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param array|object $args
 		 * @return mixed
 		 */
-		public function injectInfo($result, $action = null, $args = null){
+		public function injectInfo($result, $action = null, $args = null)
+		{
 			$relevant = ($action == 'plugin_information') && isset($args->slug) && (
-					($args->slug == $this->slug) || ($args->slug == dirname($this->pluginFile))
-				);
-			if ( !$relevant ) {
+				($args->slug == $this->slug) || ($args->slug == dirname($this->pluginFile))
+			);
+			if (!$relevant) {
 				return $result;
 			}
 
@@ -183,14 +191,15 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 			$this->fixSupportedWordpressVersion($pluginInfo);
 
 			$pluginInfo = apply_filters($this->getUniqueName('pre_inject_info'), $pluginInfo);
-			if ( $pluginInfo ) {
+			if ($pluginInfo) {
 				return $pluginInfo->toWpFormat();
 			}
 
 			return $result;
 		}
 
-		protected function shouldShowUpdates() {
+		protected function shouldShowUpdates()
+		{
 			//No update notifications for mu-plugins unless explicitly enabled. The MU plugin file
 			//is usually different from the main plugin file so the update wouldn't show up properly anyway.
 			return !$this->isUnknownMuPlugin();
@@ -201,8 +210,9 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param stdClass $updateToAdd
 		 * @return stdClass
 		 */
-		protected function addUpdateToList($updates, $updateToAdd) {
-			if ( $this->package->isMuPlugin() ) {
+		protected function addUpdateToList($updates, $updateToAdd)
+		{
+			if ($this->package->isMuPlugin()) {
 				//WP does not support automatic update installation for mu-plugins, but we can
 				//still display a notice.
 				$updateToAdd->package = null;
@@ -214,9 +224,10 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param stdClass|null $updates
 		 * @return stdClass|null
 		 */
-		protected function removeUpdateFromList($updates) {
+		protected function removeUpdateFromList($updates)
+		{
 			$updates = parent::removeUpdateFromList($updates);
-			if ( !empty($this->muPluginFile) && isset($updates, $updates->response) ) {
+			if (!empty($this->muPluginFile) && isset($updates, $updates->response)) {
 				unset($updates->response[$this->muPluginFile]);
 			}
 			return $updates;
@@ -228,14 +239,16 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return string
 		 */
-		protected function getUpdateListKey() {
-			if ( $this->package->isMuPlugin() ) {
+		protected function getUpdateListKey()
+		{
+			if ($this->package->isMuPlugin()) {
 				return $this->muPluginFile;
 			}
 			return $this->pluginFile;
 		}
 
-		protected function getNoUpdateItemFields() {
+		protected function getNoUpdateItemFields()
+		{
 			return array_merge(
 				parent::getNoUpdateItemFields(),
 				array(
@@ -258,7 +271,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param WP_Upgrader|null $upgrader The upgrader that's performing the current update.
 		 * @return bool
 		 */
-		public function isPluginBeingUpgraded($upgrader = null) {
+		public function isPluginBeingUpgraded($upgrader = null)
+		{
 			return $this->isBeingUpgraded($upgrader);
 		}
 
@@ -268,7 +282,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param WP_Upgrader|null $upgrader
 		 * @return bool
 		 */
-		public function isBeingUpgraded($upgrader = null) {
+		public function isBeingUpgraded($upgrader = null)
+		{
 			return $this->upgraderStatus->isPluginBeingUpgraded($this->pluginFile, $upgrader);
 		}
 
@@ -283,9 +298,10 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return Puc_v4p11_Plugin_Update|null
 		 */
-		public function getUpdate() {
+		public function getUpdate()
+		{
 			$update = parent::getUpdate();
-			if ( isset($update) ) {
+			if (isset($update)) {
 				/** @var Puc_v4p11_Plugin_Update $update */
 				$update->filename = $this->pluginFile;
 			}
@@ -298,7 +314,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @deprecated
 		 * @return string
 		 */
-		public function getPluginTitle() {
+		public function getPluginTitle()
+		{
 			return $this->package->getPluginTitle();
 		}
 
@@ -307,7 +324,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return bool
 		 */
-		public function userCanInstallUpdates() {
+		public function userCanInstallUpdates()
+		{
 			return current_user_can('update_plugins');
 		}
 
@@ -317,7 +335,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @deprecated
 		 * @return bool
 		 */
-		protected function isMuPlugin() {
+		protected function isMuPlugin()
+		{
 			return $this->package->isMuPlugin();
 		}
 
@@ -327,7 +346,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return bool
 		 */
-		protected function isUnknownMuPlugin() {
+		protected function isUnknownMuPlugin()
+		{
 			return empty($this->muPluginFile) && $this->package->isMuPlugin();
 		}
 
@@ -336,7 +356,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return string
 		 */
-		public function getAbsolutePath() {
+		public function getAbsolutePath()
+		{
 			return $this->pluginAbsolutePath;
 		}
 
@@ -351,7 +372,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param callable $callback
 		 * @return void
 		 */
-		public function addQueryArgFilter($callback){
+		public function addQueryArgFilter($callback)
+		{
 			$this->addFilter('request_info_query_args', $callback);
 		}
 
@@ -367,7 +389,8 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param callable $callback
 		 * @return void
 		 */
-		public function addHttpRequestArgFilter($callback) {
+		public function addHttpRequestArgFilter($callback)
+		{
 			$this->addFilter('request_info_options', $callback);
 		}
 
@@ -386,11 +409,13 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @param callable $callback
 		 * @return void
 		 */
-		public function addResultFilter($callback) {
+		public function addResultFilter($callback)
+		{
 			$this->addFilter('request_info_result', $callback, 10, 2);
 		}
 
-		protected function createDebugBarExtension() {
+		protected function createDebugBarExtension()
+		{
 			return new Puc_v4p11_DebugBar_PluginExtension($this);
 		}
 
@@ -399,14 +424,16 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 *
 		 * @return Puc_v4p11_InstalledPackage
 		 */
-		protected function createInstalledPackage() {
+		protected function createInstalledPackage()
+		{
 			return new Puc_v4p11_Plugin_Package($this->pluginAbsolutePath, $this);
 		}
 
 		/**
 		 * @return Puc_v4p11_Plugin_Package
 		 */
-		public function getInstalledPackage() {
+		public function getInstalledPackage()
+		{
 			return $this->package;
 		}
 	}
