@@ -45,8 +45,6 @@ function plugin_needs_license_check($plugin, $endpoint = null)
 
     return false;
   }
-
-  frontend_license_notice('License key is missing for this plugin ' . $plugin->name . '. ');
 }
 
 function frontend_license_notice($message)
