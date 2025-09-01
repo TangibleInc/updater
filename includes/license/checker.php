@@ -26,7 +26,7 @@ function plugin_needs_license_check($plugin, $endpoint = null) {
 
     if ($endpoint == null) {
       // show notice on front end
-      frontend_license_notice('This plugin ' . $plugin->name . ' does not have a valid Cloud ID.');
+      add_admin_license_error_notice('This plugin ' . $plugin->name . ' does not have a valid Cloud ID.');
     }
 
     return false;
@@ -37,14 +37,14 @@ function plugin_needs_license_check($plugin, $endpoint = null) {
   if (empty($license)) {
 
     if ($endpoint == null) {
-      frontend_license_notice('License key is missing for this plugin ' . $plugin->name . '. ');
+      add_admin_license_error_notice('License key is missing for this plugin ' . $plugin->name . '. ');
     }
 
     return false;
   }
 }
 
-function frontend_license_notice($message) {
+function add_admin_license_error_notice($message) {
   add_action('admin_notices', function () use ($message) {
     echo '<div class="notice notice-error is-dismissible">';
     echo '<p><strong>Plugin License Check:</strong> ' . esc_html($message) . '</p>';
