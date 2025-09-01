@@ -136,7 +136,7 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
         $responseBody = wp_remote_retrieve_body($result);
         $data = json_decode($responseBody, true);
 
-        if (!empty($data['status'] && $data['status'] == 'expired')) {
+        if (!empty($data['status'] && $data['status'] === 'expired')) {
           updater\set_license_status($this->slug, 'expired');
         }
       } catch(Exception $e) {
