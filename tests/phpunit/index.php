@@ -29,6 +29,7 @@ require_once $_WORDPRESS_TESTS_DIR . '/includes/functions.php';
 tests_add_filter('muplugins_loaded', function() use ($_PLUGIN_ENTRYPOINT) {
 
   // Setup
+  require __DIR__ . '/utils.php';
 
   require $_PLUGIN_ENTRYPOINT;
 });

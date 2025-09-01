@@ -5,25 +5,23 @@ use tangible\updater;
 
 $plugin->plugin_row_enqueued = [];
 
-add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) use ($plugin) {
+add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) use ($plugin, $name) {
 
-  $slug    = $plugin->name;
-
-  if ($file !== $slug . '/' . $slug . '.php') return;
+  if ($file !== $name . '/' . $name . '.php') return;
 
   $license = get_license_key($plugin);
   $license_status =get_license_status($plugin);
 
-  $activation_url = admin_url('options-general.php?page='.$slug.'-settings&tab=license');
+  $activation_url = admin_url('options-general.php?page='.$name.'-settings&tab=license');
 
   // Only show if license is missing or invalid
   if (!empty($license) && $license_status === 'valid') return;
 
-  $plugin->plugin_row_enqueued [] = $slug . '/' . $slug . '.php';
+  $plugin->plugin_row_enqueued [] = $name . '/' . $name . '.php';
 
   $message = empty($license) 
-    ? __('License key is missing - please activate your license for plugin updates and support.', $slug)
-    : __('License key is invalid or expired - please renew your license for plugin updates and support.', $slug);
+    ? __('License key is missing - please activate your license for plugin updates and support.', $name)
+    : __('License key is invalid or expired - please renew your license for plugin updates and support.', $name);
     
   ?>
   <tr class="active plugin-update-tr">
@@ -33,7 +31,7 @@ add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) u
           <?php echo esc_html($message); ?>
           <a href="<?php echo esc_url($activation_url); ?>"
             style="font-weight: bold;">
-            <?php echo __('Activate License', $slug); ?>
+            <?php echo __('Activate License', $name); ?>
           </a>
         </p>
       </div>
