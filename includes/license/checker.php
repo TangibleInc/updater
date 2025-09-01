@@ -25,7 +25,6 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
   if (empty($plugin->cloud_id)) {
 
     if ($endpoint == null) {
-      // show notice on front end
       add_admin_license_error_notice(
         $plugin,
         'The plugin ' . $plugin->name . ' does not have a valid Cloud ID.'
