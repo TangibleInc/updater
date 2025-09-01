@@ -131,13 +131,17 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		public function requestInfo($queryArgs = array()) {
 			list($pluginInfo, $result) = $this->requestMetadata('Puc_v4p11_Plugin_Info', 'request_info', $queryArgs);
 
-			// Set status using updater
-			$responseBody = wp_remote_retrieve_body($result);
-        	$data = json_decode($responseBody, true);
+      try {
+        // Set status using updater
+        $responseBody = wp_remote_retrieve_body($result);
+        $data = json_decode($responseBody, true);
 
-			if (!empty($data['status'] && $data['status'] == 'expired')) {
- 				updater\set_license_status($this->slug, 'expired');
-			}
+        if (!empty($data['status'] && $data['status'] == 'expired')) {
+          updater\set_license_status($this->slug, 'expired');
+        }
+      } catch(Exception $e) {
+        // Continue
+      }
 			
 			if ( $pluginInfo !== null ) {
 				/** @var Puc_v4p11_Plugin_Info $pluginInfo */
