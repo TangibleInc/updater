@@ -41,11 +41,13 @@ function init_plugin_with_license( $plugin ) {
     </span><?php
   });
 
-  // Set up plugin notices
-  require __DIR__ . '/notice.php';
+  if ( is_admin() ) {
 
-  // Check plugin license and cloud_id 
-  updater\plugin_needs_license_check($plugin);
+    // Set up plugin notices
+    
+    require __DIR__ . '/plugins-page-notice.php';    
+    updater\check_plugin_license_exists($plugin);
+  }
 
   // Initialize cron job
   add_action('init', function () use ($plugin) {

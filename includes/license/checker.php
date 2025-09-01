@@ -21,7 +21,7 @@ function cloud_endpoint( $plugin, $license_key, $action ) {
   return $response;
 }
 
-function plugin_needs_license_check($plugin, $endpoint = null) {
+function check_plugin_license_exists($plugin, $endpoint = null) {
   if (empty($plugin->cloud_id)) {
 
     if ($endpoint == null) {
@@ -46,9 +46,11 @@ function plugin_needs_license_check($plugin, $endpoint = null) {
 
 function add_admin_license_error_notice($message) {
   add_action('admin_notices', function () use ($message) {
-    echo '<div class="notice notice-error is-dismissible">';
-    echo '<p><strong>Plugin License Check:</strong> ' . esc_html($message) . '</p>';
-    echo '</div>';
+    ?>
+    <div class="notice notice-error">
+      <p><?php echo esc_html($message); ?></p>
+    </div>
+    <?php
   });
 }
 
