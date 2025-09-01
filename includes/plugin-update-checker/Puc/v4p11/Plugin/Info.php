@@ -74,7 +74,7 @@ if ( !class_exists('Puc_v4p11_Plugin_Info', false) ):
 				|| empty($apiResponse->version)
 			) {
 
-				if ($apiResponse->status =='expired') {
+				if ($apiResponse->status === 'expired') {
 					return new WP_Error(
 						'puc-expired-license', 
 						'The plugin license is expired.'
