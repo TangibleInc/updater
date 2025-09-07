@@ -7,6 +7,7 @@ use tangible\updater;
 
 require_once __DIR__ . '/action.php';
 require_once __DIR__ . '/checker.php';
+require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/page.php';
 require_once __DIR__ . '/Cron_Updater.php';
 
