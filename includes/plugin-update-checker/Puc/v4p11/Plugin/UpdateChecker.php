@@ -131,29 +131,19 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		public function requestInfo($queryArgs = array()) {
 			list($pluginInfo, $result) = $this->requestMetadata('Puc_v4p11_Plugin_Info', 'request_info', $queryArgs);
 
-<<<<<<< HEAD
-			// Set status using updater
-			$responseBody = wp_remote_retrieve_body($result);
-        	$data = json_decode($responseBody, true);
-					
- 			updater\set_license_status( $this->slug, $data['status'] );
+			try {
+				// Set status using updater
+				$responseBody = wp_remote_retrieve_body($result);
+				$data = json_decode($responseBody, true);
 
-			if ($pluginInfo !== null) {
-=======
-      try {
-        // Set status using updater
-        $responseBody = wp_remote_retrieve_body($result);
-        $data = json_decode($responseBody, true);
-
-        if (!empty($data['status'] && $data['status'] === 'expired')) {
-          updater\set_license_status($this->slug, 'expired');
-        }
-      } catch(Exception $e) {
-        // Continue
-      }
+				if (!empty($data['status'] && $data['status'] === 'expired')) {
+				updater\set_license_status($this->slug, $data['status']);
+				}
+			} catch(Exception $e) {
+				// Continue
+			}
 			
 			if ( $pluginInfo !== null ) {
->>>>>>> f536831a7b07c12579d7446d7b7731ee2df6c881
 				/** @var Puc_v4p11_Plugin_Info $pluginInfo */
 				$pluginInfo->filename = $this->pluginFile;
 				$pluginInfo->slug = $this->slug;
