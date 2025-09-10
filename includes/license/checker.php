@@ -95,6 +95,12 @@ function check_license_response( $response, $plugin ) {
         date_i18n( get_option( 'date_format' ), strtotime( $response->expires, current_time( 'timestamp' ) ) )
       );
         break;
+    case 'inactive':
+      $message = sprintf(
+        __( 'Your license key inactive on %s.' ),
+        date_i18n( get_option( 'date_format' ), strtotime( $response->expires, current_time( 'timestamp' ) ) )
+      );
+        break;
     case 'revoked':
       $message = __( 'Your license key has been disabled.' );
         break;
