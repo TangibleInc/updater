@@ -2,6 +2,7 @@
 namespace tests\updater;
 use tangible\updater;
 use tangible\framework;
+use tests\updater\utils;
 
 class Cloud_TestCase extends \WP_UnitTestCase {
 
@@ -102,9 +103,13 @@ class Cloud_TestCase extends \WP_UnitTestCase {
       'name' => 'third-plugin-name'
     ]);
 
+    utils\mock_is_admin();
+
     updater\register_plugin($first_plugin);
     updater\register_plugin($second_plugin);
     updater\register_plugin($third_plugin);
+
+    utils\unmock_is_admin();
 
     foreach ([ $first_plugin, $second_plugin ] as $plugin ) {
 

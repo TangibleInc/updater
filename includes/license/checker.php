@@ -21,6 +21,47 @@ function cloud_endpoint( $plugin, $license_key, $action ) {
   return $response;
 }
 
+function check_plugin_license_exists($plugin, $endpoint = null) {
+  if (empty($plugin->cloud_id)) {
+
+    if ($endpoint == null) {
+      add_admin_license_error_notice(
+        $plugin,
+        'The plugin ' . $plugin->name . ' does not have a valid Cloud ID.'
+      );
+    }
+
+    return false;
+  }
+
+  $license = updater\get_license_key($plugin);
+
+  if (empty($license)) {
+
+    if ($endpoint == null) {
+      add_admin_license_error_notice(
+        $plugin,
+        'License key is missing for the plugin ' . $plugin->name . '. '
+      );
+    }
+
+    return false;
+  }
+}
+
+function add_admin_license_error_notice($plugin, $message) {
+  add_action('admin_notices', function () use ($message) {
+    ?>
+    <div class="notice notice-error">
+      <p><?php echo esc_html($message); ?></p>
+      <p>Please visit <a href="<?php
+        echo esc_attr(framework\get_plugin_settings_page_url($plugin, 'license'));
+      ?>">the plugin license page</a>.</p>
+    </div>
+    <?php
+  });
+}
+
 function response_code( $response ) {
   return wp_remote_retrieve_response_code( $response );
 }
@@ -51,6 +92,12 @@ function check_license_response( $response, $plugin ) {
     case 'expired':
       $message = sprintf(
         __( 'Your license key expired on %s.' ),
+        date_i18n( get_option( 'date_format' ), strtotime( $response->expires, current_time( 'timestamp' ) ) )
+      );
+        break;
+    case 'inactive':
+      $message = sprintf(
+        __( 'Your license key inactive on %s.' ),
         date_i18n( get_option( 'date_format' ), strtotime( $response->expires, current_time( 'timestamp' ) ) )
       );
         break;

@@ -10,5 +10,5 @@ export default {
       dest: 'vendor/tangible/framework',
       branch: 'main',
     },
-  ]
+  ],
 }

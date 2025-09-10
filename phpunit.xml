@@ -17,6 +17,7 @@
         <directory suffix=".php">tests/phpunit</directory>
         <exclude>tests/*.php</exclude>
         <exclude>tests/phpunit/index.php</exclude>
+        <exclude>tests/phpunit/utils.php</exclude>
     </testsuite>
   </testsuites>
   <php>

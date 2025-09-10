@@ -22,16 +22,16 @@ function render_license_page( $plugin ) {
   : '';
 
   // License status
-  $is_valid = $license_status === 'valid';
-
+  $is_valid = $license_status === 'active';
+  $license_status = esc_html( ucfirst($license_status) );
   ?>
   <h3>
     License Key &mdash;&nbsp;
     <span class="license-status-indicator">
   <?php if ( $is_valid ) : ?>
-        <span class="valid-license success"><b>Active</b></span>
+        <span class="valid-license success"><b><?php echo $license_status; ?></b></span>
       <?php else : ?>
-        <span class="invalid-license error"><b>Not active</b></span>
+        <span class="invalid-license error"><b><?php echo $license_status; ?></b></span>
       <?php endif; ?>
     </span>
   </h3>

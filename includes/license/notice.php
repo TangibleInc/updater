@@ -20,19 +20,20 @@ add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) u
     $activation_url = admin_url('options-general.php?page='.$slug.'-settings&tab=license');
 
     // Only show if license is missing or invalid
-    if (empty($license) || $license_status !== 'valid') {
+    if (empty($license) || $license_status !== 'active') {
 
       $plugin->plugin_row_enqueued [] = $slug . '/' . $slug . '.php';
 
       $message = empty($license) 
             ? __('License key is missing - please activate your license for plugin updates and support.', $slug)
-            : __('License key is invalid or expired - please renew your license for plugin updates and support.', $slug);
+            : __('License key is '.$license_status.' - please renew your license for plugin updates and support.', $slug);
         
         ?>
         <tr class="active plugin-update-tr">
           <td colspan="4" class="plugin-update colspanchange">
             <div class="update-message notice inline notice-error notice-alt">
               <p style="display: flex; align-items: center; gap: 8px;">
+              
                 <?php echo esc_html($message); ?>
                 <a href="<?php echo esc_url($activation_url); ?>"
                   style="font-weight: bold;">
