@@ -26,12 +26,12 @@ function render_license_page( $plugin ) {
   $license_status = esc_html( ucfirst($license_status) );
   ?>
   <h3>
-    License Key &mdash;&nbsp;
+    License Key 
     <span class="license-status-indicator">
   <?php if ( $is_valid ) : ?>
-        <span class="valid-license success"><b><?php echo $license_status; ?></b></span>
+        <span class="valid-license success">&mdash;&nbsp;<b><?php echo $license_status; ?></b></span>
       <?php else : ?>
-        <span class="invalid-license error"><b><?php echo $license_status; ?></b></span>
+        <span class="invalid-license error">&mdash;&nbsp;<b><?php echo $license_status; ?></b></span>
       <?php endif; ?>
     </span>
   </h3>
