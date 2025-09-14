@@ -20,7 +20,7 @@ add_action('after_plugin_row_' . $slug . '/' . $slug . '.php', function($file) u
     $activation_url = admin_url('options-general.php?page='.$slug.'-settings&tab=license');
 
     // Only show if license is missing or invalid
-    if (empty($license) || $license_status !== 'active') {
+    if (empty($license) || $license_status !== 'valid') {
 
       $plugin->plugin_row_enqueued [] = $slug . '/' . $slug . '.php';
 

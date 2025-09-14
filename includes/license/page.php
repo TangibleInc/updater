@@ -22,7 +22,7 @@ function render_license_page( $plugin ) {
   : '';
 
   // License status
-  $is_valid = $license_status === 'active';
+  $is_valid = $license_status === 'valid';
   $license_status = esc_html( ucfirst($license_status) );
   ?>
   <h3>
