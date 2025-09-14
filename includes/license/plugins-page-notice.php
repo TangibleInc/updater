@@ -21,7 +21,7 @@ add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) u
 
   $message = empty($license) 
     ? __('License key is missing - please activate your license for plugin updates and support.', $name)
-    : __('License key is invalid or expired - please renew your license for plugin updates and support.', $name);
+    : __('License key is '.$license_status.' - please renew your license for plugin updates and support.', $name);
     
   ?>
   <tr class="active plugin-update-tr">
