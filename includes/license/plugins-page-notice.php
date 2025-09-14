@@ -15,7 +15,7 @@ add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) u
   $activation_url = admin_url('options-general.php?page='.$name.'-settings&tab=license');
 
   // Only show if license is missing or invalid
-  if (!empty($license) && $license_status === 'valid') return;
+  if ( !empty($license) && ($license_status === 'valid' || $license_status === 'active')) return;
 
   $plugin->plugin_row_enqueued [] = $name . '/' . $name . '.php';
 
