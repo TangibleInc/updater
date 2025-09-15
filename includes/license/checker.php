@@ -50,7 +50,8 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
 }
 
 function add_admin_license_error_notice($plugin, $message) {
-  add_action('admin_notices', function () use ($message) {
+
+  add_action('admin_notices', function () use ($plugin, $message) {
     ?>
     <div class="notice notice-error">
       <p><?php echo esc_html($message); ?></p>
@@ -60,6 +61,7 @@ function add_admin_license_error_notice($plugin, $message) {
     </div>
     <?php
   });
+  
 }
 
 function response_code( $response ) {
