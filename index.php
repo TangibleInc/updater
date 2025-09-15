@@ -12,7 +12,7 @@ if ( ! class_exists( 'tangible\\updater' ) ) {
 ( require __DIR__ . '/module-loader.php' )(new class() extends \StdClass {
 
   public $name = 'tangible_plugin_updater';
-  public $version = '20250820'; // Automatically updated with npm run version
+  public $version = '20250915'; // Automatically updated with npm run version
 
   public $server_url = 'https://updater.tangible.one';
   public $update_checkers = [];
