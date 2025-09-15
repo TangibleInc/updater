@@ -136,7 +136,6 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 				// Set status using updater
 				$responseBody = wp_remote_retrieve_body($result);
 				$data = json_decode($responseBody, true);
-				
 				if (!empty($data['status'])) {
 					updater\set_license_status($this->slug, $data['status']);
 				}
