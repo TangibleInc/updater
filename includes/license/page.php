@@ -17,21 +17,25 @@ function render_license_page( $plugin ) {
   $license_status = updater\get_license_status( $plugin );
 
   $field_name = $settings_key . '[' . $subfield . ']';
-  $field_value = $license_status !== updater\license_cleared_and_deactivated
-  ? updater\get_license_key( $plugin )
-  : '';
+
+  $license_key = updater\get_license_key( $plugin );
+  
+  $field_value = (
+      $license_status !== updater\license_cleared_and_deactivated 
+      && !empty($license_key)
+  ) ? $license_key : '';
 
   // License status
-  $is_valid = $license_status === 'active';
+  $is_valid = $license_status === 'valid';
   $license_status = esc_html( ucfirst($license_status) );
   ?>
   <h3>
-    License Key &mdash;&nbsp;
+    License Key 
     <span class="license-status-indicator">
   <?php if ( $is_valid ) : ?>
-        <span class="valid-license success"><b><?php echo $license_status; ?></b></span>
+        <span class="valid-license success">&mdash;&nbsp;<b><?php echo $license_status; ?></b></span>
       <?php else : ?>
-        <span class="invalid-license error"><b><?php echo $license_status; ?></b></span>
+        <span class="invalid-license error">&mdash;&nbsp;<b><?php echo $license_status; ?></b></span>
       <?php endif; ?>
     </span>
   </h3>

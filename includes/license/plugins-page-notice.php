@@ -15,13 +15,13 @@ add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) u
   $activation_url = admin_url('options-general.php?page='.$name.'-settings&tab=license');
 
   // Only show if license is missing or invalid
-  if (!empty($license) && $license_status === 'valid') return;
+  if ( !empty($license) && ($license_status === 'valid' || $license_status === 'active')) return;
 
   $plugin->plugin_row_enqueued [] = $name . '/' . $name . '.php';
 
   $message = empty($license) 
     ? __('License key is missing - please activate your license for plugin updates and support.', $name)
-    : __('License key is invalid or expired - please renew your license for plugin updates and support.', $name);
+    : __('License key is '.$license_status.' - please renew your license for plugin updates and support.', $name);
     
   ?>
   <tr class="active plugin-update-tr">

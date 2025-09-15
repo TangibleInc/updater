@@ -129,15 +129,15 @@ if ( !class_exists('Puc_v4p11_Plugin_UpdateChecker', false) ):
 		 * @return Puc_v4p11_Plugin_Info
 		 */
 		public function requestInfo($queryArgs = array()) {
+
 			list($pluginInfo, $result) = $this->requestMetadata('Puc_v4p11_Plugin_Info', 'request_info', $queryArgs);
 
 			try {
 				// Set status using updater
 				$responseBody = wp_remote_retrieve_body($result);
 				$data = json_decode($responseBody, true);
-
-				if (!empty($data['status'] && $data['status'] === 'expired')) {
-				updater\set_license_status($this->slug, $data['status']);
+				if (!empty($data['status'])) {
+					updater\set_license_status($this->slug, $data['status']);
 				}
 			} catch(Exception $e) {
 				// Continue
