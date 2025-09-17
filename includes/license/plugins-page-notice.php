@@ -19,6 +19,12 @@ add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) u
 
   $plugin->plugin_row_enqueued [] = $name . '/' . $name . '.php';
 
+  $allowed_statuses = ['inactive', 'active', 'expired'];
+
+  if (!in_array($license_status, $allowed_statuses, true)) {
+      $license_status = 'invalid or expired'; 
+  }
+
   $message = empty($license) 
     ? __('License key is missing - please activate your license for plugin updates and support.', $name)
     : __('License key is '.$license_status.' - please renew your license for plugin updates and support.', $name);
