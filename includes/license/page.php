@@ -39,11 +39,11 @@ function render_license_page( $plugin ) {
   <h3>
     License Key 
     <span class="license-status-indicator">
-  <?php if ( $is_valid ) : ?>
-        <span class="valid-license success">&mdash;&nbsp;<b><?php echo $license_status; ?></b></span>
-      <?php else : ?>
-        <span class="invalid-license error">&mdash;&nbsp;<b><?php echo $license_status; ?></b></span>
-      <?php endif; ?>
+      &mdash;&nbsp;<span class="<?php
+        echo $is_valid ? 'valid-license success' : 'invalid-license error';
+      ?>">
+        <b><?php echo $license_status; ?></b>
+      </span>
     </span>
   </h3>
   <div class="license-input-section">
@@ -55,7 +55,7 @@ function render_license_page( $plugin ) {
   </div>
   <br />
   <div class="license-buttons">
-  <?php if ( $is_valid ) : ?>
+    <?php if ( $is_valid ) : ?>
       <button type="submit" name="<?php echo updater\license_action_key; ?>" value="deactivate_license" class="button button-secondary">
         Deactivate
       </button>
