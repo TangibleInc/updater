@@ -38,7 +38,8 @@ function render_license_page( $plugin ) {
   <h3>
     License Key 
     <span class="license-status-indicator">
-      &mdash;&nbsp;<span class="<?php
+      <?php $license_status ? '&mdash;&nbsp;':'' ?>
+      <span class="<?php
         echo $is_valid ? 'valid-license success' : 'invalid-license error';
       ?>">
         <b><?php echo $license_status; ?></b>
