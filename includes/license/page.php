@@ -26,7 +26,7 @@ function render_license_page( $plugin ) {
   ) ? $license_key : '';
 
   // License status
-  $is_valid = $license_status === 'valid';
+  $is_valid = in_array($license_status, ['valid', 'active'], true);
 
   if ($license_status == 404) {
     $license_status = 'invalid or expired';
