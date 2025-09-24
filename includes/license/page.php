@@ -34,6 +34,7 @@ function render_license_page( $plugin ) {
   }
 
   $license_status = esc_html( ucfirst($license_status) );
+  
   ?>
   <h3>
     License Key 
