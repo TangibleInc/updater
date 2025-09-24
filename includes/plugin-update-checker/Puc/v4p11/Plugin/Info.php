@@ -77,16 +77,23 @@ if ( !class_exists('Puc_v4p11_Plugin_Info', false) ):
 				if ($apiResponse->status === 'expired') {
 					return new WP_Error(
 						'puc-expired-license', 
-						'The plugin license is expired.'
+						'The plugin cannot be updated because it is expired.'
+					);	
+				}
+
+				if ($apiResponse->status === 'inactive') {
+					return new WP_Error(
+						'puc-inactive-license', 
+						'The plugin cannot be updated because it is inactive.'
 					);	
 				}
 
 				return new WP_Error(
-					'puc-invalid-metadata',
-					"The plugin metadata file does not contain the required 'name' and/or 'version' keys."
+					'puc-invalid-or-expired',
+					"The plugin might be invalid or expired."
 				);
-				
 			}
+			
 			return true;
 		}
 
