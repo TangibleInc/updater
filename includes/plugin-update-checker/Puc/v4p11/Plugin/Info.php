@@ -90,7 +90,7 @@ if ( !class_exists('Puc_v4p11_Plugin_Info', false) ):
 
 				return new WP_Error(
 					'puc-invalid-or-expired',
-					"The plugin might be invalid or expired."
+					"The plugin license is invalid or expired."
 				);
 			}
 			
