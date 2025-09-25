@@ -26,7 +26,7 @@ function render_license_page( $plugin ) {
   ) ? $license_key : '';
 
   // License status
-  $is_valid = $license_status === 'valid';
+  $is_valid = $license_status === 'valid' || $license_status === 'active';
 
   if ($license_status == 404) {
     $license_status = 'invalid or expired';
@@ -34,11 +34,13 @@ function render_license_page( $plugin ) {
   }
 
   $license_status = esc_html( ucfirst($license_status) );
+  
   ?>
   <h3>
     License Key 
     <span class="license-status-indicator">
-      &mdash;&nbsp;<span class="<?php
+      <?php $license_status ? '&mdash;&nbsp;':'' ?>
+      <span class="<?php
         echo $is_valid ? 'valid-license success' : 'invalid-license error';
       ?>">
         <b><?php echo $license_status; ?></b>
