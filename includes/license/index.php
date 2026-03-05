@@ -81,3 +81,33 @@ function set_license_status($plugin, $status)
     $field => $status
   ]);
 }
+
+// Install ID — persistent UUID that survives site URL changes
+function get_install_id($plugin)
+{
+  if (is_string($plugin)) {
+    $plugin = framework\get_plugin($plugin);
+    if (empty($plugin)) return '';
+  }
+
+  $settings = framework\get_plugin_settings($plugin);
+  return $settings['install_id'] ?? '';
+}
+
+function ensure_install_id($plugin)
+{
+  if (is_string($plugin)) {
+    $plugin = framework\get_plugin($plugin);
+    if (empty($plugin)) return '';
+  }
+
+  $install_id = updater\get_install_id($plugin);
+  if (!empty($install_id)) return $install_id;
+
+  $install_id = wp_generate_uuid4();
+  framework\update_plugin_settings($plugin, [
+    'install_id' => $install_id,
+  ]);
+
+  return $install_id;
+}

@@ -37,6 +37,7 @@ function register_plugin( $plugin ) {
     $query['pluginId'] = $plugin->cloud_id;
     $query['license'] = $plugin->license ?? updater\get_license_key( $name );
     $query['url'] = site_url();
+    $query['install_id'] = updater\ensure_install_id( $plugin );
 
     // Provide default URLs
     $plugin->updater_url = $plugin->updater_url ??

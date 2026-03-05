@@ -11,10 +11,11 @@ function cloud_endpoint( $plugin, $license_key, $action ) {
     'timeout'   => 30,
     'sslverify' => false,
     'body'      => [
-        'edd_action' => $action,
-        'item_id'    => $plugin->cloud_id,
-        'license'    => $license_key,
-        'url'        => home_url(),
+        'edd_action'  => $action,
+        'item_id'     => $plugin->cloud_id,
+        'license'     => $license_key,
+        'url'         => home_url(),
+        'install_id'  => updater\get_install_id($plugin),
     ],
   ]);
 
