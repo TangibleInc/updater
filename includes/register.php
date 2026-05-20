@@ -41,10 +41,10 @@ function register_plugin( $plugin ) {
 
     // Provide default URLs.
     // Override per-site by defining TANGIBLE_CLOUD_URL in wp-config.php:
-    //   define('TANGIBLE_CLOUD_URL', 'https://staging.tangible.one/api/edd');
+    //   define('TANGIBLE_CLOUD_URL', 'https://dev-site.tangible.one/api/edd');
     $default_url = defined('TANGIBLE_CLOUD_URL')
       ? TANGIBLE_CLOUD_URL
-      : 'https://tangible.one/api/edd';
+      : 'https://api.tangible.one/api/edd';
 
     $plugin->updater_url    = $plugin->updater_url    ?? $default_url;
     $plugin->activation_url = $plugin->activation_url ?? $default_url;
