@@ -39,14 +39,15 @@ function register_plugin( $plugin ) {
     $query['url'] = site_url();
     $query['install_id'] = updater\ensure_install_id( $plugin );
 
-    // Provide default URLs
-    $plugin->updater_url = $plugin->updater_url ??
-    'https://cloud.tangible.one/api/plugin-update';
-    // 'http://localhost:83/api/plugin-update'
+    // Provide default URLs.
+    // Override per-site by defining TANGIBLE_CLOUD_URL in wp-config.php:
+    //   define('TANGIBLE_CLOUD_URL', 'https://dev-site.tangible.one/api/edd');
+    $default_url = defined('TANGIBLE_CLOUD_URL')
+      ? TANGIBLE_CLOUD_URL
+      : 'https://api.tangible.one/api/edd';
 
-    $plugin->activation_url = $plugin->activation_url ??
-    'https://cloud.tangible.one/api/edd';
-    // 'http://localhost:83/api/plugin-activation'
+    $plugin->updater_url    = $plugin->updater_url    ?? $default_url;
+    $plugin->activation_url = $plugin->activation_url ?? $default_url;
 
   }
 
