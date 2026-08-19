@@ -67,7 +67,8 @@ class Cloud_TestCase extends \WP_UnitTestCase {
       'slug' => $name,
       'pluginId' => $cloud_id,
       'license' => $license_key,
-      'url' => $test_site_url
+      'url' => $test_site_url,
+      'install_id' => updater\get_install_id($plugin),
     ]);
 
     $this->assertEquals($expected, $checker->metadataUrl);
@@ -89,11 +90,17 @@ class Cloud_TestCase extends \WP_UnitTestCase {
 
     global $wp_filter;
 
+    // The registered name can differ from the real folder/file (e.g. name
+    // tangible-searchsync-plugin living in tangible-searchsync/
+    // tangible-searchsync.php). The row notice must hook the basename
+    // WordPress actually fires for, never a reconstructed {name}/{name}.php.
     $first_plugin = $this->register_with_framework([
-      'name'     => 'first-plugin-name',
-      'cloud_id' => 123
+      'name'      => 'first-plugin-name',
+      'cloud_id'  => 123,
+      'base_path' => 'first-folder/first-plugin.php',
     ]);
 
+    // No base_path: the basename is derived from file_path.
     $second_plugin = $this->register_with_framework([
       'name'     => 'second-plugin-name',
       'cloud_id' => 124
@@ -111,14 +118,22 @@ class Cloud_TestCase extends \WP_UnitTestCase {
 
     utils\unmock_is_admin();
 
-    foreach ([ $first_plugin, $second_plugin ] as $plugin ) {
+    // Hooked by the real basename from base_path
+    $action_name = 'after_plugin_row_first-folder/first-plugin.php';
+    $this->assertTrue( isset($wp_filter[$action_name]) );
+    $this->assertEquals(1, count($wp_filter[$action_name]->callbacks));
 
-      $action_name = "after_plugin_row_{$plugin->name}/{$plugin->name}.php";
-      $action_count = count($wp_filter[$action_name]->callbacks);
+    // ...and NOT by the reconstructed {name}/{name}.php
+    $action_name = "after_plugin_row_{$first_plugin->name}/{$first_plugin->name}.php";
+    $this->assertEquals(false, isset($wp_filter[$action_name]));
 
-      $this->assertEquals(1, $action_count);
-    }
+    // Fallback when base_path is absent: derived from file_path
+    $expected_basename = plugin_basename($second_plugin->file_path);
+    $action_name = "after_plugin_row_{$expected_basename}";
+    $this->assertTrue( isset($wp_filter[$action_name]) );
+    $this->assertEquals(1, count($wp_filter[$action_name]->callbacks));
 
+    // No cloud_id: no notice hook at all
     $action_name = "after_plugin_row_{$third_plugin->name}/{$third_plugin->name}.php";
     $this->assertEquals(false, isset($wp_filter[$action_name]));
   }

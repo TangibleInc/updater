@@ -5,9 +5,15 @@ use tangible\updater;
 
 $plugin->plugin_row_enqueued = [];
 
-add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) use ($plugin, $name) {
+// The registered name can differ from the plugin's real folder/file, so hook
+// the basename WordPress actually fires for instead of {name}/{name}.php.
+$plugin_file = $plugin->file_path ?? $plugin->file ?? '';
+$plugin_basename = $plugin->base_path
+  ?? ( $plugin_file ? plugin_basename( $plugin_file ) : $name . '/' . $name . '.php' );
 
-  if ($file !== $name . '/' . $name . '.php') return;
+add_action('after_plugin_row_' . $plugin_basename, function($file) use ($plugin, $name, $plugin_basename) {
+
+  if ($file !== $plugin_basename) return;
 
   $license = get_license_key($plugin);
   $license_status =get_license_status($plugin);
@@ -17,7 +23,7 @@ add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) u
   // Only show if license is missing or invalid
   if ( !empty($license) && ($license_status === 'valid' || $license_status === 'active')) return;
 
-  $plugin->plugin_row_enqueued [] = $name . '/' . $name . '.php';
+  $plugin->plugin_row_enqueued [] = $plugin_basename;
 
   $allowed_statuses = ['inactive', 'active', 'expired'];
 
