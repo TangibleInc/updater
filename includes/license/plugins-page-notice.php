@@ -18,7 +18,13 @@ add_action('after_plugin_row_' . $plugin_basename, function($file) use ($plugin,
   $license = get_license_key($plugin);
   $license_status =get_license_status($plugin);
 
-  $activation_url = admin_url('options-general.php?page='.$name.'-settings&tab=license');
+  // Filterable so an onboarding shell can point "Activate License" at its
+  // wizard while setup is still pending, instead of at a bare settings field.
+  $activation_url = apply_filters(
+    'tangible_updater_activation_url',
+    admin_url('options-general.php?page='.$name.'-settings&tab=license'),
+    $plugin
+  );
 
   // Only show if license is missing or invalid
   if ( !empty($license) && ($license_status === 'valid' || $license_status === 'active')) return;
