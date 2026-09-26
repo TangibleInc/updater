@@ -15,7 +15,9 @@ add_action('after_plugin_row_' . $plugin_basename, function($file) use ($plugin,
 
   if ($file !== $plugin_basename) return;
 
-  if (is_free_distribution($plugin)) return;
+  // Free plugins never nag, and neither does a plugin whose distribution the
+  // server has not stated yet (first update check pending).
+  if (is_free_distribution($plugin) || !is_distribution_known($plugin)) return;
 
   $license = get_license_key($plugin);
   $license_status =get_license_status($plugin);

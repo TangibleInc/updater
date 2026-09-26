@@ -74,16 +74,18 @@ function register_plugin( $plugin ) {
     // re-fetching metadata. The server is the sole source of truth here; the
     // plugin declares nothing.
     $update_checker->addResultFilter(function ( $info, $response = null ) use ( $plugin ) {
-      if ( $response && ! is_wp_error( $response ) ) {
-        $body = json_decode( wp_remote_retrieve_body( $response ), true );
-        if ( is_array( $body ) && isset( $body['distribution'] ) ) {
-          $value = $body['distribution'] === 'free' ? 'free' : 'licensed';
-          update_option( ( $plugin->setting_prefix ?? $plugin->name ) . '_distribution', $value, false );
-        }
+      $value = updater\distribution_from_response( $response );
+      if ( $value !== null ) {
+        update_option( ( $plugin->setting_prefix ?? $plugin->name ) . '_distribution', $value, false );
       }
       return $info;
     });
   }
+
+  add_action( 'admin_init', function () use ( $plugin ) {
+    if ( ! current_user_can( 'update_plugins' ) || wp_doing_ajax() ) return;
+    updater\maybe_check_distribution( $plugin );
+  } );
 
   if ( isset( $plugin->cloud_id ) ) {
     updater\init_plugin_with_license( $plugin );
@@ -100,4 +102,48 @@ function set_server_url( $url ) {
 
 function is_free_distribution( $plugin ) {
   return get_option( ( $plugin->setting_prefix ?? $plugin->name ) . '_distribution' ) === 'free';
+}
+
+/**
+ * The distribution verdict carried by one metadata response: 'free',
+ * 'licensed', or null when the response says nothing (a network error or a
+ * body that is not JSON) — null never overwrites what was cached. A valid
+ * JSON answer WITHOUT the field comes from a server that predates free
+ * distribution, where everything is licensed; recording that keeps "unknown"
+ * meaning only "not checked yet".
+ */
+function distribution_from_response( $response ) {
+  if ( ! $response || is_wp_error( $response ) ) return null;
+  $body = json_decode( wp_remote_retrieve_body( $response ), true );
+  if ( ! is_array( $body ) ) return null;
+  return ( $body['distribution'] ?? 'licensed' ) === 'free' ? 'free' : 'licensed';
+}
+
+/**
+ * Whether the server has said free or licensed yet. Until the first update
+ * check answers, it has not — and a licence nag shown in that window would be
+ * wrong for every free plugin.
+ */
+function is_distribution_known( $plugin ) {
+  return in_array(
+    get_option( ( $plugin->setting_prefix ?? $plugin->name ) . '_distribution' ),
+    [ 'free', 'licensed' ],
+    true
+  );
+}
+
+/**
+ * Ask sooner than the ~12h schedule when the verdict is still unknown (a
+ * fresh install): one update check on an admin load, at most once an hour.
+ */
+function maybe_check_distribution( $plugin ) {
+  if ( is_distribution_known( $plugin ) ) return;
+  $name = $plugin->name;
+  $throttle = 'tangible_updater_distribution_check_' . $name;
+  if ( get_transient( $throttle ) ) return;
+  set_transient( $throttle, 1, HOUR_IN_SECONDS );
+  $checker = updater::$instance->update_checkers[ $name ] ?? null;
+  if ( $checker && method_exists( $checker, 'checkForUpdates' ) ) {
+    $checker->checkForUpdates();
+  }
 }

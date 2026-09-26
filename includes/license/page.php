@@ -10,6 +10,16 @@ const license_cleared_and_deactivated = 'License cleared and deactivated';
 // License front end
 function render_license_page( $plugin ) {
 
+  // Free: no key needed, but one can still be attached (a bundle customer's
+  // key is validated and recorded by the server all the same).
+  $free = updater\is_free_distribution( $plugin );
+  if ( $free ) {
+    ?>
+    <p>This plugin is free &mdash; no license key is needed. Updates arrive automatically.</p>
+    <details><summary>Have a license key? Enter it</summary>
+    <?php
+  }
+
   // Field name and value
   $settings_key = framework\get_plugin_settings_key( $plugin );
   $subfield = updater\get_license_key_setting_field();
@@ -70,5 +80,6 @@ function render_license_page( $plugin ) {
     <?php endif; ?>
   </div>
   <?php
+  if ( $free ) echo '</details>';
   // submit_button();
 }
