@@ -60,4 +60,11 @@ class Distribution_TestCase extends \WP_UnitTestCase {
     $this->assertStringContainsString('<details>', $html);
     $this->assertStringContainsString('id="license_key"', $html);
   }
+
+  function test_licence_calls_verify_tls_unless_opted_out() {
+    $this->assertTrue(updater\should_verify_ssl());
+    add_filter('tangible_updater_sslverify', '__return_false');
+    $this->assertFalse(updater\should_verify_ssl());
+    remove_all_filters('tangible_updater_sslverify');
+  }
 }

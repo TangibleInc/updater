@@ -4,12 +4,24 @@ namespace tangible\updater;
 use tangible\framework;
 use tangible\updater;
 
+/**
+ * Whether licence calls verify the server's TLS certificate. On by default:
+ * with it off, anything on the network path can impersonate the licence
+ * server and read the key. Local development against a server whose
+ * certificate PHP does not trust (a self-signed or mkcert host) can opt out
+ * with TANGIBLE_UPDATER_SSLVERIFY false or the filter.
+ */
+function should_verify_ssl( $plugin = null ) {
+  $verify = defined( 'TANGIBLE_UPDATER_SSLVERIFY' ) ? (bool) TANGIBLE_UPDATER_SSLVERIFY : true;
+  return (bool) apply_filters( 'tangible_updater_sslverify', $verify, $plugin );
+}
+
 function cloud_endpoint( $plugin, $license_key, $action ) {
 
   // Cloud post endpoint
   $response = wp_remote_post($plugin->activation_url, [
     'timeout'   => 30,
-    'sslverify' => false,
+    'sslverify' => updater\should_verify_ssl( $plugin ),
     'body'      => [
         'edd_action'  => $action,
         'item_id'     => $plugin->cloud_id,
