@@ -29,7 +29,9 @@ function init_plugin_with_license( $plugin ) {
   $basename = plugin_basename( $file );
   $action_name = "in_plugin_update_message-{$basename}";
 
-  add_action($action_name, function ( $plugin ) use ( $transient_key ) {
+  add_action($action_name, function ( $wp_plugin_data ) use ( $transient_key, $plugin ) {
+
+    if ( updater\is_free_distribution( $plugin ) ) return;
 
     $fail_update_status = get_transient( $transient_key );
     if (empty( $fail_update_status )) return;

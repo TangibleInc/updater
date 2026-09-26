@@ -39,6 +39,10 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
 
   if (empty($license)) {
 
+    if (updater\is_free_distribution($plugin)) {
+      return false;
+    }
+
     if ($endpoint == null) {
       add_admin_license_error_notice(
         $plugin,

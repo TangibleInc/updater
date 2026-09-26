@@ -15,6 +15,8 @@ add_action('after_plugin_row_' . $plugin_basename, function($file) use ($plugin,
 
   if ($file !== $plugin_basename) return;
 
+  if (is_free_distribution($plugin)) return;
+
   $license = get_license_key($plugin);
   $license_status =get_license_status($plugin);
 
