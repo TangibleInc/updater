@@ -68,6 +68,21 @@ function register_plugin( $plugin ) {
       // Optionally, validate license and return empty string to disable link
       return $message;
     }, 10, 1);
+
+    // Cache the server's `distribution` verdict ("free" | "licensed") so the
+    // rest of the module can suppress license nags for free plugins without
+    // re-fetching metadata. The server is the sole source of truth here; the
+    // plugin declares nothing.
+    $update_checker->addResultFilter(function ( $info, $response = null ) use ( $plugin ) {
+      if ( $response && ! is_wp_error( $response ) ) {
+        $body = json_decode( wp_remote_retrieve_body( $response ), true );
+        if ( is_array( $body ) && isset( $body['distribution'] ) ) {
+          $value = $body['distribution'] === 'free' ? 'free' : 'licensed';
+          update_option( ( $plugin->setting_prefix ?? $plugin->name ) . '_distribution', $value, false );
+        }
+      }
+      return $info;
+    });
   }
 
   if ( isset( $plugin->cloud_id ) ) {
@@ -81,4 +96,8 @@ function register_theme( $theme ) {
 
 function set_server_url( $url ) {
   updater::$instance->server_url = $url;
+}
+
+function is_free_distribution( $plugin ) {
+  return get_option( ( $plugin->setting_prefix ?? $plugin->name ) . '_distribution' ) === 'free';
 }

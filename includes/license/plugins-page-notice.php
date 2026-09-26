@@ -9,6 +9,8 @@ add_action('after_plugin_row_' . $name . '/' . $name . '.php', function($file) u
 
   if ($file !== $name . '/' . $name . '.php') return;
 
+  if (is_free_distribution($plugin)) return;
+
   $license = get_license_key($plugin);
   $license_status =get_license_status($plugin);
 
