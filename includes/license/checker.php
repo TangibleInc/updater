@@ -66,10 +66,11 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
       return false;
     }
 
-    if ($endpoint == null && !licence_notice_yields($plugin)) {
+    if ($endpoint == null) {
       add_admin_license_error_notice(
         $plugin,
-        'License key is missing for the plugin ' . $plugin->name . '. '
+        'License key is missing for the plugin ' . $plugin->name . '. ',
+        true
       );
     }
 
@@ -77,9 +78,13 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
   }
 }
 
-function add_admin_license_error_notice($plugin, $message) {
+function add_admin_license_error_notice($plugin, $message, $can_yield = false) {
 
-  add_action('admin_notices', function () use ($plugin, $message) {
+  add_action('admin_notices', function () use ($plugin, $message, $can_yield) {
+    // Decided at render, not when the check runs: the check runs as the plugin
+    // registers with the updater, before the onboarding shell has registered
+    // the wizard that answers the yield filter.
+    if ($can_yield && licence_notice_yields($plugin)) return;
     ?>
     <div class="notice notice-error">
       <p><?php echo esc_html($message); ?></p>
