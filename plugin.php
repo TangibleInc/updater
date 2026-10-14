@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Tangible Updater module
  * Description: Updater for Tangible plugins and themes
- * Version: 2025.9.15
+ * Version: 2026.10.14
  * GitHub URI: TangibleInc/updater
  */
 require_once __DIR__ . '/vendor/tangible/framework/index.php';
