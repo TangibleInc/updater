@@ -19,6 +19,10 @@ add_action('after_plugin_row_' . $plugin_basename, function($file) use ($plugin,
   // server has not stated yet (first update check pending).
   if (is_free_distribution($plugin) || !is_distribution_known($plugin)) return;
 
+  // One licence message at a time: while the onboarder's setup notice speaks
+  // for this plugin, the row stays quiet (its "Setup" link is right there).
+  if (licence_notice_yields($plugin)) return;
+
   $license = get_license_key($plugin);
   $license_status =get_license_status($plugin);
 

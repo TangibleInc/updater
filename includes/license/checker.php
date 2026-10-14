@@ -34,6 +34,17 @@ function cloud_endpoint( $plugin, $license_key, $action ) {
   return $response;
 }
 
+/**
+ * Whether another surface already speaks for this plugin's licence, so the
+ * updater's own nags (the admin notice and the Plugins-row strip) stay quiet
+ * and the admin sees one message, not two. The onboarding shell answers true
+ * while its setup notice is showing for the plugin; once setup is finished,
+ * a key removed, expired or revoked later is the updater's to report again.
+ */
+function licence_notice_yields( $plugin ) {
+  return (bool) apply_filters( 'tangible_updater_licence_notice_yields', false, $plugin );
+}
+
 function check_plugin_license_exists($plugin, $endpoint = null) {
   if (empty($plugin->cloud_id)) {
 
@@ -55,7 +66,7 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
       return false;
     }
 
-    if ($endpoint == null) {
+    if ($endpoint == null && !licence_notice_yields($plugin)) {
       add_admin_license_error_notice(
         $plugin,
         'License key is missing for the plugin ' . $plugin->name . '. '
