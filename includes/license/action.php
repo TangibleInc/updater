@@ -45,9 +45,13 @@ function process_license_action($plugin, $new_settings) {
   $error_message = '';
   if (is_wp_error($response) || $response_code === 403) {
 
-     $error_message = is_wp_error($response) 
-            ? 'License server error: ' . $response->get_error_message()
-            : $response_body['error'] ?? 'License validation failed (Forbidden)';
+     $error_message = is_wp_error($response)
+            ? sprintf(
+                /* translators: %s: the error message from the HTTP request */
+                __('License server error: %s', 'tangible-updater'),
+                $response->get_error_message()
+              )
+            : $response_body['error'] ?? __('License validation failed (Forbidden)', 'tangible-updater');
   } else {
     if (false === $response_body->success) {
       $error_message = updater\check_license_response($response_body, $plugin);

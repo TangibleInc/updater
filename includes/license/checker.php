@@ -51,7 +51,13 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
     if ($endpoint == null) {
       add_admin_license_error_notice(
         $plugin,
-        'The plugin ' . $plugin->name . ' does not have a valid Cloud ID.'
+        function () use ($plugin) {
+          return sprintf(
+            /* translators: %s: plugin name */
+            __('The plugin %s does not have a valid Cloud ID.', 'tangible-updater'),
+            $plugin->name
+          );
+        }
       );
     }
 
@@ -69,7 +75,13 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
     if ($endpoint == null) {
       add_admin_license_error_notice(
         $plugin,
-        'License key is missing for the plugin ' . $plugin->name . '. ',
+        function () use ($plugin) {
+          return sprintf(
+            /* translators: %s: plugin name */
+            __('License key is missing for the plugin %s.', 'tangible-updater'),
+            $plugin->name
+          );
+        },
         true
       );
     }
@@ -78,6 +90,11 @@ function check_plugin_license_exists($plugin, $endpoint = null) {
   }
 }
 
+/**
+ * $message is a string, or a closure that returns one. Pass a closure for a
+ * translated message: the check runs as the plugin registers, before init,
+ * when the tangible-updater translations are not loaded yet.
+ */
 function add_admin_license_error_notice($plugin, $message, $can_yield = false) {
 
   add_action('admin_notices', function () use ($plugin, $message, $can_yield) {
@@ -85,12 +102,18 @@ function add_admin_license_error_notice($plugin, $message, $can_yield = false) {
     // registers with the updater, before the onboarding shell has registered
     // the wizard that answers the yield filter.
     if ($can_yield && licence_notice_yields($plugin)) return;
+    if ($message instanceof \Closure) $message = $message();
     ?>
     <div class="notice notice-error">
       <p><?php echo esc_html($message); ?></p>
-      <p>Please visit <a href="<?php
-        echo esc_attr(framework\get_plugin_settings_page_url($plugin, 'license'));
-      ?>">the plugin license page</a>.</p>
+      <p><?php
+        printf(
+          /* translators: 1: start of the link to the license page, 2: its end */
+          esc_html__('Please visit %1$sthe plugin license page%2$s.', 'tangible-updater'),
+          '<a href="' . esc_attr(framework\get_plugin_settings_page_url($plugin, 'license')) . '">',
+          '</a>'
+        );
+      ?></p>
     </div>
     <?php
   });
@@ -121,42 +144,52 @@ function submit_action( $plugin, $action ) {
 
 function check_license_response( $response, $plugin ) {
 
-  $message = __( 'An error occurred, please try again.' );
+  $message = __( 'An error occurred, please try again.', 'tangible-updater' );
 
   switch ( $response->error ) {
     case 'expired':
       $message = sprintf(
-        __( 'Your license key expired on %s.' ),
+        /* translators: %s: the date the license key expired */
+        __( 'Your license key expired on %s.', 'tangible-updater' ),
         date_i18n( get_option( 'date_format' ), strtotime( $response->expires, current_time( 'timestamp' ) ) )
       );
         break;
     case 'inactive':
       $message = sprintf(
-        __( 'Your license key inactive on %s.' ),
+        /* translators: %s: the license key's expiry date */
+        __( 'Your license key inactive on %s.', 'tangible-updater' ),
         date_i18n( get_option( 'date_format' ), strtotime( $response->expires, current_time( 'timestamp' ) ) )
       );
         break;
     case 'revoked':
-      $message = __( 'Your license key has been disabled.' );
+      $message = __( 'Your license key has been disabled.', 'tangible-updater' );
         break;
     case 'missing':
-      $message = __( 'Invalid license.' );
+      $message = __( 'Invalid license.', 'tangible-updater' );
         break;
     case 'invalid':
     case 'site_inactive':
-      $message = __( 'Your license is not active for this URL.' );
+      $message = __( 'Your license is not active for this URL.', 'tangible-updater' );
         break;
     case 'item_id_mismatch':
-      $message = sprintf( __( 'This appears to be an invalid license key for %s.' ), $plugin->name );
+      $message = sprintf(
+        /* translators: %s: plugin name */
+        __( 'This appears to be an invalid license key for %s.', 'tangible-updater' ),
+        $plugin->name
+      );
         break;
     case 'no_activations_left':
-      $message = __( 'Your license key has reached its activation limit.' );
+      $message = __( 'Your license key has reached its activation limit.', 'tangible-updater' );
         break;
     case 'invalid_item_id':
-      $message = sprintf( __( 'The license key is not valid for product ID %s.' ), $plugin->cloud_id );
+      $message = sprintf(
+        /* translators: %s: the product's ID on the license server */
+        __( 'The license key is not valid for product ID %s.', 'tangible-updater' ),
+        $plugin->cloud_id
+      );
         break;
     default:
-      $message = __( 'An error occurred, please try again.' );
+      $message = __( 'An error occurred, please try again.', 'tangible-updater' );
   }
 
   return $message;

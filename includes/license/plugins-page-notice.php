@@ -39,16 +39,20 @@ add_action('after_plugin_row_' . $plugin_basename, function($file) use ($plugin,
 
   $plugin->plugin_row_enqueued [] = $plugin_basename;
 
-  $allowed_statuses = ['inactive', 'active', 'expired'];
-
-  if (!in_array($license_status, $allowed_statuses, true)) {
-      $license_status = 'invalid or expired'; 
+  // One whole sentence per status, so translators never see a status word
+  // spliced into a sentence. A key that is present and active has returned
+  // above, and any status other than inactive or expired reads as
+  // "invalid or expired".
+  if (empty($license)) {
+    $message = __('License key is missing - please activate your license for plugin updates and support.', 'tangible-updater');
+  } elseif ($license_status === 'inactive') {
+    $message = __('License key is inactive - please renew your license for plugin updates and support.', 'tangible-updater');
+  } elseif ($license_status === 'expired') {
+    $message = __('License key is expired - please renew your license for plugin updates and support.', 'tangible-updater');
+  } else {
+    $message = __('License key is invalid or expired - please renew your license for plugin updates and support.', 'tangible-updater');
   }
 
-  $message = empty($license) 
-    ? __('License key is missing - please activate your license for plugin updates and support.', $name)
-    : __('License key is '.$license_status.' - please renew your license for plugin updates and support.', $name);
-    
   ?>
   <tr class="active plugin-update-tr">
     <td colspan="4" class="plugin-update colspanchange">
@@ -57,7 +61,7 @@ add_action('after_plugin_row_' . $plugin_basename, function($file) use ($plugin,
           <?php echo esc_html($message); ?>
           <a href="<?php echo esc_url($activation_url); ?>"
             style="font-weight: bold;">
-            <?php echo __('Activate License', $name); ?>
+            <?php esc_html_e('Activate License', 'tangible-updater'); ?>
           </a>
         </p>
       </div>
