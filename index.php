@@ -22,6 +22,18 @@ if ( ! class_exists( 'tangible\\updater' ) ) {
   function load() {
     updater::$instance = $this;
     $this->url = plugins_url( '/', __FILE__ );
+
+    // The updater's own strings (license page and notices) are in the
+    // tangible-updater domain, translated in languages/. As in the framework,
+    // a site-level file in wp-content/languages/plugins/ wins: it is loaded
+    // first, and the earliest file loaded for a domain takes precedence.
+    $load_translations = function () {
+      $mofile = 'tangible-updater-' . determine_locale() . '.mo';
+      load_textdomain( 'tangible-updater', WP_LANG_DIR . '/plugins/' . $mofile );
+      load_textdomain( 'tangible-updater', __DIR__ . '/languages/' . $mofile );
+    };
+    did_action( 'init' ) ? $load_translations() : add_action( 'init', $load_translations, 0 );
+
     require_once __DIR__ . '/includes/index.php';
   }
 

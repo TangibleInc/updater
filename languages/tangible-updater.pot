@@ -1,0 +1,192 @@
+# Copyright (C) 2026 
+# This file is distributed under the same license as the Tangible Updater module plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tangible Updater module 2026.10.14\n"
+"Report-Msgid-Bugs-To: https://github.com/TangibleInc/updater/issues\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-21T17:14:57+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: tangible-updater\n"
+
+#. Plugin Name of the plugin
+#: plugin.php
+msgid "Tangible Updater module"
+msgstr ""
+
+#. Description of the plugin
+#: plugin.php
+msgid "Updater for Tangible plugins and themes"
+msgstr ""
+
+#. translators: %s: the error message from the HTTP request
+#: includes/license/action.php:51
+#, php-format
+msgid "License server error: %s"
+msgstr ""
+
+#: includes/license/action.php:54
+msgid "License validation failed (Forbidden)"
+msgstr ""
+
+#. translators: %s: plugin name
+#: includes/license/checker.php:57
+#, php-format
+msgid "The plugin %s does not have a valid Cloud ID."
+msgstr ""
+
+#. translators: %s: plugin name
+#: includes/license/checker.php:81
+#, php-format
+msgid "License key is missing for the plugin %s."
+msgstr ""
+
+#. translators: 1: start of the link to the license page, 2: its end
+#: includes/license/checker.php:112
+#, php-format
+msgid "Please visit %1$sthe plugin license page%2$s."
+msgstr ""
+
+#: includes/license/checker.php:147
+#: includes/license/checker.php:192
+msgid "An error occurred, please try again."
+msgstr ""
+
+#. translators: %s: the date the license key expired
+#: includes/license/checker.php:153
+#, php-format
+msgid "Your license key expired on %s."
+msgstr ""
+
+#. translators: %s: the license key's expiry date
+#: includes/license/checker.php:160
+#, php-format
+msgid "Your license key inactive on %s."
+msgstr ""
+
+#: includes/license/checker.php:165
+msgid "Your license key has been disabled."
+msgstr ""
+
+#: includes/license/checker.php:168
+msgid "Invalid license."
+msgstr ""
+
+#: includes/license/checker.php:172
+msgid "Your license is not active for this URL."
+msgstr ""
+
+#. translators: %s: plugin name
+#: includes/license/checker.php:177
+#, php-format
+msgid "This appears to be an invalid license key for %s."
+msgstr ""
+
+#: includes/license/checker.php:182
+msgid "Your license key has reached its activation limit."
+msgstr ""
+
+#. translators: %s: the product's ID on the license server
+#: includes/license/checker.php:187
+#, php-format
+msgid "The license key is not valid for product ID %s."
+msgstr ""
+
+#. translators: %s: why the update failed, as the update server reported it
+#: includes/license/init.php:43
+#, php-format
+msgid "Update failed: %s"
+msgstr ""
+
+#: includes/license/page.php:21
+msgctxt "license status"
+msgid "Valid"
+msgstr ""
+
+#: includes/license/page.php:23
+msgctxt "license status"
+msgid "Active"
+msgstr ""
+
+#: includes/license/page.php:25
+msgctxt "license status"
+msgid "Inactive"
+msgstr ""
+
+#: includes/license/page.php:27
+msgctxt "license status"
+msgid "Expired"
+msgstr ""
+
+#: includes/license/page.php:29
+msgctxt "license status"
+msgid "Disabled"
+msgstr ""
+
+#: includes/license/page.php:31
+msgctxt "license status"
+msgid "Invalid"
+msgstr ""
+
+#: includes/license/page.php:33
+msgctxt "license status"
+msgid "Invalid or expired"
+msgstr ""
+
+#: includes/license/page.php:35
+msgctxt "license status"
+msgid "License cleared and deactivated"
+msgstr ""
+
+#: includes/license/page.php:48
+msgid "This plugin is free — no license key is needed. Updates arrive automatically."
+msgstr ""
+
+#: includes/license/page.php:49
+msgid "Have a license key? Enter it"
+msgstr ""
+
+#: includes/license/page.php:80
+msgid "License Key"
+msgstr ""
+
+#: includes/license/page.php:95
+msgid "Enter License Key"
+msgstr ""
+
+#: includes/license/page.php:101
+msgid "Deactivate"
+msgstr ""
+
+#: includes/license/page.php:104
+msgid "Deactivate & Clear License"
+msgstr ""
+
+#: includes/license/page.php:108
+msgid "Activate"
+msgstr ""
+
+#: includes/license/plugins-page-notice.php:47
+msgid "License key is missing - please activate your license for plugin updates and support."
+msgstr ""
+
+#: includes/license/plugins-page-notice.php:49
+msgid "License key is inactive - please renew your license for plugin updates and support."
+msgstr ""
+
+#: includes/license/plugins-page-notice.php:51
+msgid "License key is expired - please renew your license for plugin updates and support."
+msgstr ""
+
+#: includes/license/plugins-page-notice.php:53
+msgid "License key is invalid or expired - please renew your license for plugin updates and support."
+msgstr ""
+
+#: includes/license/plugins-page-notice.php:64
+msgid "Activate License"
+msgstr ""

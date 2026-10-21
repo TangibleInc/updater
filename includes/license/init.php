@@ -37,8 +37,12 @@ function init_plugin_with_license( $plugin ) {
     if (empty( $fail_update_status )) return;
 
     ?><br /><span style="color: #d63638; font-weight: bold;">
-      ⚠️ Update failed: <?php
-        echo esc_html( $fail_update_status );
+      ⚠️ <?php
+        printf(
+          /* translators: %s: why the update failed, as the update server reported it */
+          esc_html__( 'Update failed: %s', 'tangible-updater' ),
+          esc_html( $fail_update_status )
+        );
       ?>
     </span><?php
   });

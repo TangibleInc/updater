@@ -5,7 +5,37 @@ use tangible\framework;
 use tangible\updater;
 
 const license_action_key = 'tangible_updater_license_action';
+
+// Stored as the license status, so it stays in English: it is compared
+// against what is saved. license_status_label() translates it for display.
 const license_cleared_and_deactivated = 'License cleared and deactivated';
+
+/**
+ * The license status as shown on the license page. Statuses are stored as the
+ * server sent them (or as the sentinel above); the known ones are translated
+ * here, and anything else is shown as it was before, capitalised.
+ */
+function license_status_label( $status ) {
+  switch ( $status ) {
+    case 'valid':
+      return _x( 'Valid', 'license status', 'tangible-updater' );
+    case 'active':
+      return _x( 'Active', 'license status', 'tangible-updater' );
+    case 'inactive':
+      return _x( 'Inactive', 'license status', 'tangible-updater' );
+    case 'expired':
+      return _x( 'Expired', 'license status', 'tangible-updater' );
+    case 'disabled':
+      return _x( 'Disabled', 'license status', 'tangible-updater' );
+    case 'invalid':
+      return _x( 'Invalid', 'license status', 'tangible-updater' );
+    case 'invalid or expired':
+      return _x( 'Invalid or expired', 'license status', 'tangible-updater' );
+    case license_cleared_and_deactivated:
+      return _x( 'License cleared and deactivated', 'license status', 'tangible-updater' );
+  }
+  return ucfirst( (string) $status );
+}
 
 // License front end
 function render_license_page( $plugin ) {
@@ -15,8 +45,8 @@ function render_license_page( $plugin ) {
   $free = updater\is_free_distribution( $plugin );
   if ( $free ) {
     ?>
-    <p>This plugin is free &mdash; no license key is needed. Updates arrive automatically.</p>
-    <details><summary>Have a license key? Enter it</summary>
+    <p><?php esc_html_e( 'This plugin is free — no license key is needed. Updates arrive automatically.', 'tangible-updater' ); ?></p>
+    <details><summary><?php esc_html_e( 'Have a license key? Enter it', 'tangible-updater' ); ?></summary>
     <?php
   }
 
@@ -43,11 +73,11 @@ function render_license_page( $plugin ) {
     $is_valid = false;
   }
 
-  $license_status = esc_html( ucfirst($license_status) );
-  
+  $license_status = esc_html( updater\license_status_label( $license_status ) );
+
   ?>
   <h3>
-    License Key 
+    <?php esc_html_e( 'License Key', 'tangible-updater' ); ?>
     <span class="license-status-indicator">
       <?php $license_status ? '&mdash;&nbsp;':'' ?>
       <span class="<?php
@@ -62,20 +92,20 @@ function render_license_page( $plugin ) {
             id="license_key"
             name="<?php echo esc_attr( $field_name ); ?>" 
             value="<?php echo esc_attr( $field_value ); ?>"
-            placeholder="Enter License Key">
+            placeholder="<?php esc_attr_e( 'Enter License Key', 'tangible-updater' ); ?>">
   </div>
   <br />
   <div class="license-buttons">
     <?php if ( $is_valid ) : ?>
       <button type="submit" name="<?php echo updater\license_action_key; ?>" value="deactivate_license" class="button button-secondary">
-        Deactivate
+        <?php esc_html_e( 'Deactivate', 'tangible-updater' ); ?>
       </button>
       <button type="submit" name="<?php echo updater\license_action_key; ?>" value="deactivate_license_clear" class="button button-danger">
-        Deactivate &amp; Clear License
+        <?php esc_html_e( 'Deactivate & Clear License', 'tangible-updater' ); ?>
       </button>
     <?php else : ?>
       <button type="submit" name="<?php echo updater\license_action_key; ?>" value="activate_license" class="button button-primary">
-        Activate
+        <?php esc_html_e( 'Activate', 'tangible-updater' ); ?>
       </button>
     <?php endif; ?>
   </div>
